@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LayoutModule } from './feature-modules/Layout/layout.module';
 import { RouterModule } from '@angular/router';
 import { AdministratorModule } from './feature-modules/administrator/administrator.module';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -17,8 +18,7 @@ import { AdministratorModule } from './feature-modules/administrator/administrat
     LayoutModule,
     AdministratorModule,
     HttpClientModule,
-    
-
+    RouterModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
