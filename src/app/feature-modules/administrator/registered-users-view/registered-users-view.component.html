@@ -1,0 +1,40 @@
+<div class="user-list">
+  <h2>Registered users</h2>
+  <form [formGroup]="searchForm" class="search-form">
+    <input type="text" formControlName="firstName" placeholder="Search by first name" />
+    <input type="text" formControlName="lastName" placeholder="Search by last name" />
+    <input type="email" formControlName="email" placeholder="Search by email" />
+    <input type="number" formControlName="minPostCount" placeholder="Min posts" />
+    <input type="number" formControlName="maxPostCount" placeholder="Max posts" />
+    <div>
+      <label for="sortBy">Sort by:</label>
+      <select formControlName="sortBy">
+        <option value="followersCount">Followers count</option>
+        <option value="email">Email</option>
+      </select>
+      <label for="sortDirection">Sort direction:</label>
+      <select formControlName="sortDirection">
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+      </select>
+      <button type="button" (click)="searchUsers()">Search</button>
+      <button type="button" (click)="resetSearch()">Reset Search</button>
+    </div>
+  </form>
+
+  <div class="card-container">
+    <div class="user-card" *ngFor="let user of users">
+      <div class="user-card-header">
+        <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+      </div>
+      <div class="user-card-body">
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Post count:</strong> {{ user.postCount }}</p>
+        <p><strong>Followers count:</strong> {{ user.followersCount }}</p>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="users.length === 0" class="no-results">
+    No users found matching the search criteria.
+  </div>
+</div>
