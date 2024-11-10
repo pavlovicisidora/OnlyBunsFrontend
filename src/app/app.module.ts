@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LayoutModule } from './feature-modules/Layout/layout.module';
 import { RouterModule } from '@angular/router';
 import { AdministratorModule } from './feature-modules/administrator/administrator.module';
+import { PostAuthoringModule } from './feature-modules/post-authoring/post-authoring.module';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { AdministratorModule } from './feature-modules/administrator/administrat
     AdministratorModule,
     HttpClientModule,
     RouterModule,
+    PostAuthoringModule
   ],
   providers: [],
   bootstrap: [AppComponent]
