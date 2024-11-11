@@ -1,8 +1,10 @@
 <div class="main-bar">
     <div class="logo-profile">
         <h1>ONLYBUNS</h1>
-        <button class="logging">Log in</button>
-
+        <button class="logging" [routerLink]="['/login']" *ngIf="!hasSignedIn()">Log in</button>
+        <!-- Prikazuje dugme za odjavu ako je korisnik ulogovan -->
+        <button class="logging" (click)="logout()" *ngIf="hasSignedIn()">Log out</button>
+    
     </div>
     <div class="routing">
         <button class="menu-buttons" [routerLink]="['home']">Home</button> | 
