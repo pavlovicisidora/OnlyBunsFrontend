@@ -13,16 +13,19 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon'; 
 import { AuthenticationModule } from './feature-modules/authentication/authentication.module';
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
-
+import { AdministratorModule } from './feature-modules/administrator/administrator.module';
+import { PostAuthoringModule } from './feature-modules/post-authoring/post-authoring.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     LayoutModule,
+    AdministratorModule,
+    HttpClientModule,
     RouterModule,
     ReactiveFormsModule,  
     MatInputModule,      
@@ -33,7 +36,8 @@ import { HttpClientModule } from '@angular/common/http'; // Import HttpClientMod
     MatIconModule,
     AuthenticationModule,
     HttpClientModule
-    
+    PostAuthoringModule
+
   ],
   providers: [],
   bootstrap: [AppComponent]
