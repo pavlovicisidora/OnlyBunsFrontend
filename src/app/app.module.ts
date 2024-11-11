@@ -35,7 +35,7 @@ import { PostAuthoringModule } from './feature-modules/post-authoring/post-autho
     MatDialogModule,     
     MatIconModule,
     AuthenticationModule,
-    HttpClientModule
+    HttpClientModule,
     PostAuthoringModule
 
   ],
