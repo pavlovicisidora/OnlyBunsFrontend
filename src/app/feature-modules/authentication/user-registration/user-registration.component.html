@@ -1,1 +1,48 @@
-<p>user-registration works!</p>
+<form [formGroup]="registrationForm">
+  <div>
+    <!-- First Name -->
+    <div>
+      <label for="firstName">First Name</label>
+      <input id="firstName" formControlName="firstName" type="text" />
+    </div>
+
+    <!-- Last Name -->
+    <div>
+      <label for="lastName">Last Name</label>
+      <input id="lastName" formControlName="lastName" type="text" />
+    </div>
+
+    <!-- Username -->
+    <div>
+      <label for="username">Username</label>
+      <input id="username" formControlName="username" type="text" />
+    </div>
+
+    <!-- Email -->
+    <div>
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="text" />
+    </div>
+
+    <!-- Password -->
+    <div>
+      <label for="password">Password</label>
+      <input id="password" formControlName="password" type="password" />
+    </div>
+
+    <!-- Location Dropdown or New Location Fields -->
+    <div>
+      <label for="locationId">Location</label>
+      <select id="locationId" formControlName="location" (change)="loadLocations()">
+        <option *ngFor="let loc of availableLocations" [value]="loc.id">
+          {{ loc.city }}, {{ loc.country }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Submit Button -->
+    <div>
+      <button type="submit" (click)="registerUser()">Register</button>
+    </div>
+  </div>
+</form>
