@@ -8,7 +8,7 @@ import { NgModel } from '@angular/forms';
 //import { RegisteredUsersViewComponent } from './feature-modules/administrator/registered-users-view/registered-users-view.component';
 import { PostComponent } from './feature-modules/post-authoring/post/post.component';
 import { PostCreateComponent } from './feature-modules/post-authoring/post-create/post-create.component';
-
+import { UserProfileComponent } from './feature-modules/post-authoring/user-profile/user-profile.component';
 const routes: Routes =[
     {path: '',component: HomeComponent},
     {path: 'home',component: HomeComponent},
@@ -17,7 +17,9 @@ const routes: Routes =[
     {path: 'registration', component: UserRegistrationComponent},
     {path: 'login', component: LoginComponent},
     {path: 'activation', component: EmailActivationComponent},
-    {path: 'create-post', component: PostCreateComponent}
+    {path: 'create-post', component: PostCreateComponent},
+    {path: 'user-profile', component: UserProfileComponent}
+
 ];
 @NgModule({
     imports:[RouterModule.forRoot(routes)],
