@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from '../models/post';
 import { PostAuthoringService } from '../post-authoring.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -10,7 +11,7 @@ import { PostAuthoringService } from '../post-authoring.service';
 export class PostComponent implements OnInit {
   posts: Post[] = [];
 
-  constructor(private service: PostAuthoringService) {}
+  constructor(private service: PostAuthoringService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -21,5 +22,9 @@ export class PostComponent implements OnInit {
       next: (posts) => this.posts = posts,
       error: (err) => console.error('Error fetching posts:', err)
     });
+  }
+
+  seeProfile(userId: number) {
+    this.router.navigate(['/user-profile'], { queryParams: { id: userId } });
   }
 }
