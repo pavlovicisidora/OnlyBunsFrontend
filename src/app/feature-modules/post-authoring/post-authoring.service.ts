@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { Post } from './models/post';
 import { UserProfile } from './models/user-profile.model';
 import { Comment } from './models/comment';
+import { PostCreation } from './models/postCreation';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class PostAuthoringService {
   getUserProfile(userId: number): Observable<UserProfile> {
     return this.http.get<UserProfile>(`http://localhost:8080/api/users/profile/${userId}`);
   }
+
 
   likePost(postId: number, userId: number): Observable<Post> {
     const params = new HttpParams().set('userId', userId.toString());
@@ -49,4 +51,9 @@ export class PostAuthoringService {
     const params = new HttpParams().set('userId', userId.toString());
     return this.http.get<boolean>(`http://localhost:8080/api/posts/${postId}/isLiked`, { params });
   }
+
+  createNewPost(newPost : PostCreation): Observable<PostCreation>{
+    return this.http.post<PostCreation>(`http://localhost:8080/api/posts/create`, newPost);
+  }
+
 }
