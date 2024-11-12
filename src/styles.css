@@ -2,4 +2,8 @@ html, body {
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* Prevent horizontal scrolling */
+    background-image: linear-gradient(to right bottom, #ffe7a9, #ffc79b, #ffa99d, #ec90a9, #c680b7);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100%;
 }
