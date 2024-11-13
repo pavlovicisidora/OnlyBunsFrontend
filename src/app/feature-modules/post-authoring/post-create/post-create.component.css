@@ -3,13 +3,11 @@
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 666px;
+    width: 660px;
     box-sizing: border-box;
     margin: auto;
-    position: absolute;
-    top: 60%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    
+    
 }
 
 .form-heading {
