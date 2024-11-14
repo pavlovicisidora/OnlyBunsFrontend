@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { RegisteredUser } from './models/registered-user';
 
@@ -10,7 +10,12 @@ export class AdministratorService {
   constructor(private http: HttpClient) {}
 
   getAllUsers(): Observable<RegisteredUser[]> {
-    return this.http.get<RegisteredUser[]>(`http://localhost:8080/api/users/all`);
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<RegisteredUser[]>(`http://localhost:8080/api/users/all`,{headers});
   }
 
   searchUsers(searchParams: any): Observable<RegisteredUser[]> {

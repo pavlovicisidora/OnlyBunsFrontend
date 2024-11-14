@@ -68,9 +68,7 @@ export class AuthenticationService {
       responseType: 'json'
     }).pipe(
       map((res) => {
-        console.log(res);
         this.access_token = res.accessToken;
-        console.log(res.accessToken);
         localStorage.setItem("jwt", res.accessToken);
         return res;
       })
@@ -86,13 +84,13 @@ export class AuthenticationService {
 
   // Nova metoda za dobijanje informacija o korisniku
   getUserInfo(): Observable<any> {
-    /*const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
       'Accept': 'application/json'
-    });*/
+    });
 
-    return this.http.get<any>('http://localhost:8080/user/userInfo');
+    return this.http.get<any>('http://localhost:8080/api/users/userInfo', {headers});
   }
 
   tokenIsPresent() {

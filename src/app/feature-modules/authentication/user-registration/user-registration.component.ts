@@ -68,6 +68,11 @@ export class UserRegistrationComponent implements OnInit{
         next: () => {
           this.registrationSuccess = true;
           this.errorMessage = null;
+          this.registrationForm.value.username = '';
+          this.registrationForm.value.password = '';
+          this.registrationForm.value.firstName = '';
+          this.registrationForm.value.lastName = '';
+          this.registrationForm.value.email = '';
         },
         error: (error) => {
           this.registrationSuccess = false;
