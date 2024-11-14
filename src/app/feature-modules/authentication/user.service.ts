@@ -27,7 +27,6 @@ export class UserService {
       // Metoda za odjavljivanje korisnika
       logout() {
         this.currentUser = null;  // Resetuje currentUser
-        localStorage.removeItem("jwt");  // Uklanja JWT token iz localStorage
       }
 
 }

@@ -13,12 +13,13 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     // Pretplatite se na rezultat `getMyInfo` da biste ažurirali `currentUser`
-   /* this.userService.getMyInfo().subscribe(user => {
+    this.userService.getMyInfo().subscribe(user => {
       this.userService.currentUser = user;
-    });*/
+    });
   }
 
   hasSignedIn() {
+    
     return this.userService.isLoggedIn();
   }
 
