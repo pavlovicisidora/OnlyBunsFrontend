@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Location } from './model/location.model';
 import { Registration } from './model/user-registration.model';
 import { JwtAuthenticationRequest } from './model/jwtAuthenticationRequest.model';
@@ -12,11 +12,20 @@ import { Router } from '@angular/router';
 })
 export class AuthenticationService {
 
+  private currentUserSubject = new BehaviorSubject<any>(null);
+  public currentUser$: Observable<any> = this.currentUserSubject.asObservable();
  
   constructor(
     private http: HttpClient,
     private router: Router
-  ) {}
+  ) {
+    const token = localStorage.getItem('jwt');
+    if (token) {
+      this.getUserInfo().subscribe(userInfo => {
+        this.currentUserSubject.next(userInfo); // Ako postoji token, postavljamo currentUser
+      });
+    }
+  }
 
   private access_token = null;
 
@@ -62,7 +71,7 @@ export class AuthenticationService {
       'password': user.password
     };
 
-    // Dodaj responseType: 'json' kako bi se odgovor tretirao kao JSON
+    
     return this.http.post<any>('http://localhost:8080/auth/login', body, {
       headers: loginHeaders,
       responseType: 'json'
@@ -70,13 +79,16 @@ export class AuthenticationService {
       map((res) => {
         this.access_token = res.accessToken;
         localStorage.setItem("jwt", res.accessToken);
+        this.getUserInfo().subscribe(userInfo => {
+          this.currentUserSubject.next(userInfo);
+        });
         return res;
       })
     );
   }
 
   logout() {
-    //this.userService.currentUser = null;
+    this.currentUserSubject.next(null);
     localStorage.removeItem("jwt");
     this.access_token = null;
     this.router.navigate(['/login']);

@@ -1,31 +1,26 @@
-import { Component, OnInit, ViewEncapsulation} from '@angular/core';
-import { UserService } from '../../authentication/user.service';
-import { AuthenticationService } from '../../authentication/authentication.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from '../../authentication/authentication.service'; 
+import { Observable } from 'rxjs';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.css'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
   
-  constructor( private userService: UserService, private authService: AuthenticationService) { }
+  currentUser: any; // Varijabla koja će držati korisničke podatke
 
-  ngOnInit() {
-    // Pretplatite se na rezultat `getMyInfo` da biste ažurirali `currentUser`
-    this.userService.getMyInfo().subscribe(user => {
-      this.userService.currentUser = user;
-    });
+  constructor(private authService: AuthenticationService) {
   }
 
-  hasSignedIn() {
+  ngOnInit(): void{
+    this.authService.currentUser$.subscribe( (user) => {this.currentUser = user});
+    console.log(this.currentUser);
     
-    return this.userService.isLoggedIn();
   }
 
   logout() {
     this.authService.logout();
-    this.userService.logout();
   }
-
 }
