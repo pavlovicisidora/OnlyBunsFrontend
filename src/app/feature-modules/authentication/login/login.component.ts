@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
-import { UserService } from '../user.service';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 interface DisplayMessage {
@@ -24,9 +23,9 @@ export class LoginComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private authService: AuthenticationService,
-    private userService: UserService,
     private router: Router
   ) {
+    
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
