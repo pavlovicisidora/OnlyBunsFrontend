@@ -10,6 +10,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class RegisteredUsersViewComponent implements OnInit{
   users: RegisteredUser[] = [];
+  totalPages: number = 0;
+  currentPage: number = 0;
+  pageSize: number = 5;
   searchForm: FormGroup = new FormGroup({
     firstName: new FormControl(''),
     lastName: new FormControl(''),
@@ -27,9 +30,10 @@ export class RegisteredUsersViewComponent implements OnInit{
   }
 
   searchUsers() {
-    this.service.searchUsers(this.searchForm.value).subscribe({
-      next: (users: RegisteredUser[]) => {
-        this.users = users;
+    this.service.searchUsers(this.searchForm.value, this.currentPage, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.users = response.content; 
+        this.totalPages = response.totalPages;
       },
       error: (err) => {
         console.error('Error occurred while searching users:', err);
@@ -39,8 +43,15 @@ export class RegisteredUsersViewComponent implements OnInit{
   }
 
   loadUsers() {
-    this.service.getAllUsers().subscribe(users => {
-      this.users = users;
+    this.service.getAllUsers(this.currentPage, this.pageSize).subscribe({
+      next: (response: any) => {
+        this.users = response.content;
+        this.totalPages = response.totalPages;
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+        alert('An error occurred while fetching users. Please try again later.');
+      }
     });
   }
 
@@ -55,6 +66,11 @@ export class RegisteredUsersViewComponent implements OnInit{
       sortDirection: '', 
     });
   
+    this.loadUsers();
+  }
+
+  changePage(page: number) {
+    this.currentPage = page;
     this.loadUsers();
   }
 

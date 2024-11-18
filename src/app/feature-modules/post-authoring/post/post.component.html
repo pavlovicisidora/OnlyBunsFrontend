@@ -1,19 +1,17 @@
-<div *ngFor="let post of posts" class="post-card">
+<div *ngFor="let post of posts" class="post-card" >
   <h2 (click)="seeProfile(post.userId)">{{ post.userId }}</h2>
   <img *ngIf="post.image" [src]="post.image" alt="Post Image" class="post-image" />
 
   <h3>{{ post.description }}</h3>
   <p>Likes: {{ post.likeCount }}</p>
 
-  <input [(ngModel)]="userId" placeholder="Enter your User ID" />
-
-  <button (click)="likePost(post.id, userId)" class="like-button">
+  <button (click)="likePost(post.id)" class="like-button">
     <img src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
   </button>
-  <button (click)="deletePost(post.id, userId)">Delete</button>
-  <button (click)="toggleUpdateForm(post.id)">Update</button>
+  <button (click)="deletePost(post.id)" *ngIf="loggedInUser.id === post.userId">Delete</button>
+  <button (click)="toggleUpdateForm(post.id)" *ngIf="loggedInUser.id === post.userId">Update</button>
 
-  <div *ngIf="newPost.showUpdateForm">
+  <div *ngIf="updateFormVisibility[post.id]">
     <div>
       <label for="newDescription">New Description:</label>
       <input [(ngModel)]="newPost.newDescription" id="newDescription" placeholder="Enter new description" />
@@ -22,7 +20,7 @@
       <label for="newImage">New Image URL:</label>
       <input [(ngModel)]="newPost.newImage" id="newImage" placeholder="Enter new image URL" />
     </div>
-    <button (click)="updatePost(post.id, userId)">Save</button>
+    <button (click)="updatePost(post.id)">Save</button>
   </div>
 
   <h4>Comments:</h4>
@@ -36,6 +34,6 @@
   </ng-template>
 
   <input [(ngModel)]="newCommentText[post.id]" placeholder="Add a comment" />
-  <button (click)="addComment(post.id, userId)">Post Comment</button>
+  <button (click)="addComment(post.id)">Post Comment</button>
   <hr>
 </div>

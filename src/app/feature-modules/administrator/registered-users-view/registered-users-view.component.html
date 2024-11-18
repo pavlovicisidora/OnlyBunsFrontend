@@ -37,4 +37,12 @@
   <div *ngIf="users.length === 0" class="no-results">
     No users found matching the search criteria.
   </div>
+
+  <div class="pagination">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
+    <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="changePage(i)">
+      {{ i + 1 }}
+    </button>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages - 1">Next</button>
+  </div>
 </div>

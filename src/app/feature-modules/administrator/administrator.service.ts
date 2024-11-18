@@ -9,17 +9,26 @@ import { RegisteredUser } from './models/registered-user';
 export class AdministratorService {
   constructor(private http: HttpClient) {}
 
-  getAllUsers(): Observable<RegisteredUser[]> {
+  getAllUsers(page: number, size: number): Observable<any> {
     const token = localStorage.getItem("jwt");
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Authorization': `Bearer ${token}`,
       'Accept': 'application/json'
     });
-    return this.http.get<RegisteredUser[]>(`http://localhost:8080/api/users/all`,{headers});
+    let params = new HttpParams().set('page', page.toString()).set('size', size.toString());
+    
+    return this.http.get<any>(`http://localhost:8080/api/users/all`, { headers, params });
   }
 
-  searchUsers(searchParams: any): Observable<RegisteredUser[]> {
-    let params = new HttpParams();
+  searchUsers(searchParams: any, page: number, size: number): Observable<any> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    });
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
 
     if (searchParams.firstName) params = params.set('firstName', searchParams.firstName);
     if (searchParams.lastName) params = params.set('lastName', searchParams.lastName);
@@ -29,6 +38,6 @@ export class AdministratorService {
     if (searchParams.sortDirection !== null) params = params.set('sortDirection', searchParams.sortDirection.toString());
     if (searchParams.sortBy !== null) params = params.set('sortBy', searchParams.sortBy.toString());
 
-    return this.http.get<RegisteredUser[]>(`http://localhost:8080/api/users/search`, { params });
+    return this.http.get<any>(`http://localhost:8080/api/users/search`, { headers, params });
   }
 }

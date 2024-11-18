@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, } from '@angular/core';
 import { Post } from '../models/post';
 import { PostAuthoringService } from '../post-authoring.service';
 import { Router } from '@angular/router';
+import { RegisteredUser } from '../../administrator/models/registered-user';
+import { AuthenticationService } from '../../authentication/authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -11,17 +14,29 @@ import { Router } from '@angular/router';
 export class PostComponent implements OnInit {
   posts: Post[] = [];
   newCommentText: { [postId: number]: string } = {};
-  userId: number = 0;
-  newPost: { showUpdateForm: boolean, newDescription: string, newImage: string } = {
-    showUpdateForm: false,
+  newPost: { newDescription: string, newImage: string } = {
     newDescription: '',
     newImage: ''
   };
+  updateFormVisibility: { [postId: number]: boolean } = {}; 
+  loggedInUser: RegisteredUser = { 
+    id: 0,
+    firstName: '',
+    lastName: '',
+    email: '',
+    postCount: 0,
+    followersCount: 0,
+  };
 
-  constructor(private service: PostAuthoringService, private router: Router) {}
+  constructor(private service: PostAuthoringService, private router: Router, private userService: AuthenticationService) {}
 
   ngOnInit(): void {
     this.loadPosts();
+
+    this.userService.getUserInfo().subscribe({
+      next: (loggedInUser) => this.loggedInUser = loggedInUser,
+      error: (err) => console.error('Error fetching loggedInUser:', err)
+    });
   }
 
   loadPosts() {
@@ -36,69 +51,55 @@ export class PostComponent implements OnInit {
   }
 
   toggleUpdateForm(postId: number) {
-    const post = this.posts.find(p => p.id === postId);
-    if (post) {
-      this.newPost.showUpdateForm = !this.newPost.showUpdateForm;
-      if (!this.newPost.showUpdateForm) {
-        this.newPost.newDescription = '';
-        this.newPost.newImage = '';
-      }
+    this.updateFormVisibility[postId] = !this.updateFormVisibility[postId];
+    if (!this.updateFormVisibility[postId]) {
+      this.newPost.newDescription = '';
+      this.newPost.newImage = '';
     }
   }
 
-  updatePost(postId: number, userId: number) {
-    if (!userId) {
-      alert("Please enter your User ID.");
-      return;
-    }
+  updatePost(postId: number) {
     const post = this.posts.find(p => p.id === postId);
     if (post) {
-      this.service.updatePost(postId, userId, this.newPost.newDescription, this.newPost.newImage).subscribe({
+      this.service.updatePost(postId, this.loggedInUser.id, this.newPost.newDescription, this.newPost.newImage).subscribe({
         next: () => {
+          post.description = this.newPost.newDescription;
+          post.image = this.newPost.newImage;
           this.newPost.newDescription = '';
           this.newPost.newImage = '';
-          this.newPost.showUpdateForm = false; 
+          this.updateFormVisibility[postId] = false;
+          this.posts = [...this.posts];
         },
         error: (err) => console.error('Error updating post:', err)
       });
     }
   }
 
-  likePost(postId: number, userId: number) {
-    if (!userId) {
-      alert("Please enter your User ID.");
-      return;
-    }
-    this.service.likePost(postId, userId).subscribe({
-      next: () => {
-        this.loadPosts();
-      },
-      error: (err) => console.error('Error liking post:', err)
-    });
+  likePost(postId: number) {
+      this.service.likePost(postId, this.loggedInUser.id).subscribe({
+        next: () => {
+          const post = this.posts.find(p => p.id === postId);
+          if (post) {
+            post.likeCount += 1;
+          }
+        },
+        error: (err) => console.error('Error liking post:', err)
+      });
   }
   
-  deletePost(postId: number, userId: number) {
-    if (!userId) {
-      alert("Please enter your User ID.");
-      return;
-    }
-    this.service.deletePost(postId, userId).subscribe({
+  deletePost(postId: number) {
+    this.service.deletePost(postId, this.loggedInUser.id).subscribe({
       next: () => {
-        // Remove the post from the local list immediately
         this.posts = this.posts.filter(post => post.id !== postId);
       },
       error: (err) => console.error('Error deleting post:', err)
     });
   }
 
-  addComment(postId: number, userId: number) {
-    if (!userId) {
-      alert("Please enter your User ID.");
-      return;
-    }
+  addComment(postId: number) {
     const content = this.newCommentText[postId];
     if (content) {
-      this.service.addComment(postId, userId, content).subscribe({
+      this.service.addComment(postId, this.loggedInUser.id, content).subscribe({
         next: (newComment) => {
           const post = this.posts.find(post => post.id === postId);
           if (post) {
