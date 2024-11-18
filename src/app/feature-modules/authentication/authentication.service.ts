@@ -6,6 +6,7 @@ import { Registration } from './model/user-registration.model';
 import { JwtAuthenticationRequest } from './model/jwtAuthenticationRequest.model';
 import { catchError, map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { RegisteredUser } from '../administrator/models/registered-user';
 
 @Injectable({
   providedIn: 'root'
@@ -95,14 +96,14 @@ export class AuthenticationService {
   }
 
   // Nova metoda za dobijanje informacija o korisniku
-  getUserInfo(): Observable<any> {
+  getUserInfo(): Observable<RegisteredUser> {
     const token = localStorage.getItem("jwt");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
       'Accept': 'application/json'
     });
 
-    return this.http.get<any>('http://localhost:8080/api/users/userInfo', {headers});
+    return this.http.get<RegisteredUser>('http://localhost:8080/api/users/userInfo', {headers});
   }
 
   tokenIsPresent() {
