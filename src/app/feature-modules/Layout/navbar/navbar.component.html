@@ -3,7 +3,7 @@
         <h1>ONLYBUNS</h1>
         <button class="logging" [routerLink]="['/login']" *ngIf="currentUser === null">Log in</button>
         <!-- Prikazuje dugme za odjavu ako je korisnik ulogovan -->
-        <button class="logging" (click)="logout()" *ngIf="currentUser !== null">Log out</button>
+        <button class="log-out" (click)="logout()" *ngIf="currentUser !== null">Log out</button>
     
     </div>
     <div class="routing">

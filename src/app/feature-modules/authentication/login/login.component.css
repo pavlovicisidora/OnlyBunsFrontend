@@ -1,0 +1,72 @@
+.form-div{
+    margin: auto;
+    padding: 30px;
+    background-color: rgb(255, 255, 255, 0.6);
+    backdrop-filter: blur(50px);
+    width: 70vh;
+    height: 60%;
+    margin-top: 8vh;
+    border-radius: 15px;
+    box-shadow: 1px 1px 20px 1px rgba(255, 255, 255, 0.505);
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.colum-div{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+}
+
+.input-design{
+    width: 250px;
+    height: 30px;
+    border-radius: 25px;
+    border:2px solid #3B163B;
+    padding: 5px;
+    background-color: rgb(255, 255, 255, 0.4);
+}
+
+.label-design{
+    font-size: 17px;
+    font-weight: bold;
+    color: #3B163B;
+}
+
+.submit-css{
+    width: 180px;
+    height: 40px;
+    border-radius: 25px;
+    background-color: #3B163B;
+    border: 1px solid #3B163B;
+    font-weight: bold;
+    color: #CC8EBF;
+    margin-left: 6vh;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.submit-css:hover{
+    background-color: #CC8EBF;
+    color: #3B163B;
+}
+
+.link-design{
+    color: #FF7A33;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link-design:hover{
+    text-decoration: underline;
+}
+
+.error{
+    margin-top: -24px;
+    margin-bottom: 6px;
+    margin-left: 4vh;
+    color: red;
+    font-weight: bold;
+}
