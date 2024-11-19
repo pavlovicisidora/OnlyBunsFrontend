@@ -1,27 +1,33 @@
+<div class="form-div">
+  <h1 style="color: #3B163B;">Log in</h1>
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <!-- Username -->
-  <div>
-    <label for="username">Username</label>
-    <input id="username" formControlName="username" type="text" />
+  <div class="colum-div">
+    <label class="label-design" for="username">Username</label>
+    <input class="input-design" id="username" formControlName="username" type="text" />
   </div>
 
   <!-- Password -->
-  <div>
-    <label for="password">Password</label>
-    <input id="password" formControlName="password" type="password" />
-  </div>
-
-  <!-- Submit Button -->
-  <div>
-    <button type="submit">Login</button>
+  <div class="colum-div">
+    <label class="label-design" for="password">Password</label>
+    <input class="input-design" id="password" formControlName="password" type="password" />
   </div>
 
   <!-- Error Message -->
   <div *ngIf="errorMessage" class="error">
     {{ errorMessage }}
   </div>
+
+  <!-- Submit Button -->
+  <div>
+    <button class="submit-css" type="submit">LOG IN</button>
+  </div>
+
+  
 </form>
 
-  <button [routerLink]="['/registration']">Sign in</button>
+  <p style="color: #3B163B;">Don't have an account? <a [routerLink]="['/registration']" class="link-design">Sign up</a></p>
+
+  </div>
 
   
