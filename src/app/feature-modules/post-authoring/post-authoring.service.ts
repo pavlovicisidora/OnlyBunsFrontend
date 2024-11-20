@@ -85,4 +85,13 @@ export class PostAuthoringService {
     return this.http.post<PostCreation>(`http://localhost:8080/api/posts/create`, newPost);
   }
 
+  addImage(formData: FormData){
+    return this.http.post<string>(`http://localhost:8080/api/image`,formData,{responseType: 'text' as 'json'});
+  }  
+
+  getImage(pictureName: string): Observable<Blob>{
+    const params = new HttpParams().set('filePath',pictureName);
+    return this.http.get<Blob>(`http://localhost:8080/api/image`,{params, responseType: 'blob' as 'json'});
+  }
+
 }
