@@ -4,4 +4,8 @@
     <p>Email: {{userProfile?.email}}</p>
     <p>Followers: {{userProfile?.followersCount}}</p>
     <p>Posts: {{userProfile?.postCount}}</p>
+
+    <button *ngIf="loggedInUser && loggedInUser.id !== userProfile?.id" (click)="toggleFollow()">
+        {{ isFollowing ? 'Unfollow' : 'Follow' }}
+    </button>
 </div>

@@ -85,4 +85,31 @@ export class PostAuthoringService {
     return this.http.post<PostCreation>(`http://localhost:8080/api/posts/create`, newPost);
   }
 
+  followUser(userId: number): Observable<void> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.put<void>(`http://localhost:8080/api/users/follow/${userId}`, {}, { headers });
+  }
+
+  unfollowUser(userId: number): Observable<void> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.delete<void>(`http://localhost:8080/api/users/unfollow/${userId}`, { headers });
+  }
+
+  isFollowingUser(userId: number): Observable<boolean> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<boolean>(`http://localhost:8080/api/users/isFollowing/${userId}`, { headers });
+  }
+
 }
