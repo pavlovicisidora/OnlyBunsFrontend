@@ -40,7 +40,8 @@ export class PostComponent implements OnInit {
   }
 
   loadPosts() {
-    this.service.getAllPosts().subscribe({
+    console.log(this.loggedInUser);
+    this.service.getPosts(this.loggedInUser).subscribe({
       next: (posts) => this.posts = posts,
       error: (err) => console.error('Error fetching posts:', err)
     });

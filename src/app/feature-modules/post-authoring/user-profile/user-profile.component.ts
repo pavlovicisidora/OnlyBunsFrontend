@@ -1,7 +1,7 @@
-import { Component, OnInit, ChangeDetectorRef  } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserProfile } from '../models/user-profile.model';
 import { PostAuthoringService } from '../post-authoring.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RegisteredUser } from '../../administrator/models/registered-user';
 import { AuthenticationService } from '../../authentication/authentication.service';
 @Component({
@@ -20,37 +20,49 @@ export class UserProfileComponent implements OnInit {
     postCount: 0,
     followersCount: 0,
   };
+  followingUsers: UserProfile[] = [];
   isFollowing: boolean = false;
+  userId: number = 0;
   
   constructor(
     private route: ActivatedRoute, 
     private postService: PostAuthoringService, 
     private userService: AuthenticationService,
-    private cdr: ChangeDetectorRef
+     private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.loadDetails();
+    this.route.queryParams.subscribe(params => {
+      this.userId = Number(params['id']);
+      if (this.userId) {
+        this.loadDetails(this.userId);
+      }
+    });
     this.userService.getUserInfo().subscribe({
       next: (loggedInUser) => this.loggedInUser = loggedInUser,
       error: (err) => console.error('Error fetching loggedInUser:', err)
     });
   }
+  loadDetails(userId: number) {
+    this.postService.getUserProfile(userId).subscribe({
+      next: (profile) => {
+        this.userProfile = profile;
+        this.checkIfFollowing(userId);
+        this.loadFollowingUsers(userId);
+      },
+      error: (err) => console.error('Error fetching user profile:', err)
+    });
+  }
 
-  loadDetails() {
-    // Uzimamo userId iz URL-a
-    const userId = Number(this.route.snapshot.queryParamMap.get('id'));
-    // Proveravamo da li imamo validan ID i pozivamo servis da dobijemo profil korisnika
-    if (userId) {
-      this.postService.getUserProfile(userId).subscribe({
-        next: (profile) => {
-          this.userProfile = profile;
+  seeProfile(userId: number) {
+    this.router.navigate(['/user-profile'], { queryParams: { id: userId } });
+  }
 
-          this.checkIfFollowing(userId);
-        },
-        error: (err) => console.error('Error fetching user profile:', err)
-      });
-    }
+  loadFollowingUsers(userId: number): void {
+    this.postService.getFollowingsAccounts(userId).subscribe({
+      next: (users) => this.followingUsers = users,
+      error: (err) => console.error('Error fetching following users:', err)
+    });
   }
 
   checkIfFollowing(userId: number): void {
@@ -73,8 +85,7 @@ export class UserProfileComponent implements OnInit {
       this.postService.followUser(this.userProfile.id).subscribe({
         next: () => {
           this.isFollowing = true; 
-          this.loadDetails();
-          this.cdr.detectChanges(); 
+          this.loadDetails(this.userId); 
         },
         error: (err) => console.error('Error following user:', err)
       });
@@ -86,8 +97,7 @@ export class UserProfileComponent implements OnInit {
       this.postService.unfollowUser(this.userProfile.id).subscribe({
         next: () => {
           this.isFollowing = false; 
-          this.loadDetails();
-          this.cdr.detectChanges(); 
+          this.loadDetails(this.userId);
         },
         error: (err) => console.error('Error unfollowing user:', err)
       });

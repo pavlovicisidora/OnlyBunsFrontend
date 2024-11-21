@@ -5,6 +5,7 @@ import { Post } from './models/post';
 import { UserProfile } from './models/user-profile.model';
 import { Comment } from './models/comment';
 import { PostCreation } from './models/postCreation';
+import { RegisteredUser } from '../administrator/models/registered-user';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,13 @@ export class PostAuthoringService {
 
   constructor(private http: HttpClient) { }
 
-  getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`http://localhost:8080/api/posts/all`);
+  getPosts(loggedInUser: RegisteredUser): Observable<Post[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<Post[]>(`http://localhost:8080/api/posts`, { headers });
   }
 
   getPostById(id: number): Observable<Post> {
@@ -110,6 +116,15 @@ export class PostAuthoringService {
       'Accept': 'application/json'
     });
     return this.http.get<boolean>(`http://localhost:8080/api/users/isFollowing/${userId}`, { headers });
+  }
+
+  getFollowingsAccounts(userId: number): Observable<UserProfile[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<UserProfile[]>(`http://localhost:8080/api/users/following/${userId}`, { headers });
   }
 
 }
