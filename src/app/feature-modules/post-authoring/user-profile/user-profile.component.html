@@ -4,4 +4,17 @@
     <p>Email: {{userProfile?.email}}</p>
     <p>Followers: {{userProfile?.followersCount}}</p>
     <p>Posts: {{userProfile?.postCount}}</p>
+
+    <button *ngIf="loggedInUser && loggedInUser.id !== userProfile?.id" (click)="toggleFollow()">
+        {{ isFollowing ? 'Unfollow' : 'Follow' }}
+    </button>
 </div>
+
+<div *ngIf="followingUsers.length > 0" class="following-section">
+    <h3>Following:</h3>
+    <ul>
+      <li *ngFor="let user of followingUsers">
+        <p (click)="seeProfile(user.id)">{{user.firstName}} {{user.lastName}}</p>
+      </li>
+    </ul>
+  </div>
