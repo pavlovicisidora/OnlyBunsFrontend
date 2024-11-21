@@ -8,6 +8,7 @@ import { PostComponent } from './post/post.component';
 import { PostCreateComponent } from './post-create/post-create.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { FormsModule } from '@angular/forms'; 
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
@@ -22,7 +23,8 @@ import { FormsModule } from '@angular/forms';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    SharedModule
 
   ],
   exports: [

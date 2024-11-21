@@ -11,7 +11,7 @@ import { PostCreateComponent } from './feature-modules/post-authoring/post-creat
 import { UserProfileComponent } from './feature-modules/post-authoring/user-profile/user-profile.component';
 import { TrendsComponent } from './feature-modules/Layout/ToImplement/trends/trends.component';
 import { ChatComponent } from './feature-modules/Layout/ToImplement/chat/chat.component';
-import { MapComponent } from './feature-modules/Layout/ToImplement/map/map.component';
+import { MapComponent } from './shared/map/map/map.component';
 import { ForUComponent } from './feature-modules/Layout/ToImplement/for-u/for-u.component';
 import { AboutComponent } from './feature-modules/Layout/ToImplement/about/about.component';
 import { ProfileInfoComponent } from './feature-modules/Layout/ToImplement/profile-info/profile-info.component';

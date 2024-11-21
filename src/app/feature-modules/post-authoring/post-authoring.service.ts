@@ -82,12 +82,23 @@ export class PostAuthoringService {
   }
 
   createNewPost(newPost : PostCreation): Observable<PostCreation>{
-    return this.http.post<PostCreation>(`http://localhost:8080/api/posts/create`, newPost);
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.post<PostCreation>(`http://localhost:8080/api/posts/create`, newPost, {headers});
   }
 
-  addImage(formData: FormData){
-    return this.http.post<string>(`http://localhost:8080/api/image`,formData,{responseType: 'text' as 'json'});
-  }  
+  addImage(file: FormData) : Observable<string> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    
+    return this.http.post<string>(`http://localhost:8080/api/image`,file,{ headers });
+  } 
 
   getImage(pictureName: string): Observable<Blob>{
     const params = new HttpParams().set('filePath',pictureName);
