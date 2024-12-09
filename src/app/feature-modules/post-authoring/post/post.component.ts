@@ -4,7 +4,6 @@ import { PostAuthoringService } from '../post-authoring.service';
 import { Router } from '@angular/router';
 import { RegisteredUser } from '../../administrator/models/registered-user';
 import { AuthenticationService } from '../../authentication/authentication.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-post',
@@ -27,8 +26,9 @@ export class PostComponent implements OnInit {
     postCount: 0,
     followersCount: 0,
   };
+  isLiked: boolean | null = null;
 
-  constructor(private service: PostAuthoringService, private router: Router, private userService: AuthenticationService) {}
+  constructor(private service: PostAuthoringService, private router: Router, private userService: AuthenticationService,) {}
 
   ngOnInit(): void {
     this.loadPosts();
@@ -77,16 +77,31 @@ export class PostComponent implements OnInit {
   }
 
   likePost(postId: number) {
+      this.isPostLiked(postId);
       this.service.likePost(postId, this.loggedInUser.id).subscribe({
         next: () => {
           const post = this.posts.find(p => p.id === postId);
-          if (post) {
+          if (post && this.isLiked) {
+            post.likeCount -= 1;
+            this.isLiked = null;
+          }
+          else if(post && !this.isLiked) {
             post.likeCount += 1;
+            this.isLiked = null;
           }
         },
         error: (err) => console.error('Error liking post:', err)
       });
   }
+
+  isPostLiked(postId: number) {
+    this.service.isPostLiked(postId, this.loggedInUser.id).subscribe({
+      next: (response) => {
+        this.isLiked = response;
+      },
+      error: (err) => console.error('Error liking post:', err)
+    });
+}
   
   deletePost(postId: number) {
     this.service.deletePost(postId, this.loggedInUser.id).subscribe({
