@@ -8,7 +8,6 @@ import { ChatComponent } from './ToImplement/chat/chat.component';
 import { MapComponent } from './ToImplement/map/map.component';
 import { ForUComponent } from './ToImplement/for-u/for-u.component';
 import { AboutComponent } from './ToImplement/about/about.component';
-import { ProfileInfoComponent } from './ToImplement/profile-info/profile-info.component';
 
 @NgModule({
 declarations: [
@@ -18,8 +17,7 @@ declarations: [
     ChatComponent,
     MapComponent,
     ForUComponent,
-    AboutComponent,
-    ProfileInfoComponent
+    AboutComponent
 ],
 imports: [
     CommonModule,
