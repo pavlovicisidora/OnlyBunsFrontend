@@ -1,20 +1,185 @@
 <div class="user-profile-main">
-    <p>Firstname: {{userProfile?.firstName}}</p>
-    <p>Lastname: {{userProfile?.lastName}}</p>
-    <p>Email: {{userProfile?.email}}</p>
-    <p>Followers: {{userProfile?.followersCount}}</p>
-    <p>Posts: {{userProfile?.postCount}}</p>
+  <div class="user-info">
+    <span class="img-border"><img class="pfp-style" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHEG52Sr7jhRGeCPW52ySJWncc0xd6KZNLpQ&s" alt="Wide Image Example"></span>
+    
+    <div class="user-info-text">
+      <div style="display: flex;flex-direction: row; gap: 15px;">
+        <h1>{{userProfile?.username}}</h1>
 
-    <button *ngIf="loggedInUser && loggedInUser.id !== userProfile?.id" (click)="toggleFollow()">
-        {{ isFollowing ? 'Unfollow' : 'Follow' }}
-    </button>
+        <button [ngClass]="isFollowing ? 'unfollow-button' : 'follow-button'" *ngIf="loggedInUser && loggedInUser.id !== userProfile?.id" (click)="toggleFollow()">
+          {{ isFollowing ? 'Unfollow' : 'Follow' }}
+        </button>
+      </div>
+
+      <div class="counting-data">
+        <span><p><b>{{userProfile?.postCount}}</b> posts</p></span>
+        <span><p><b>{{userProfile?.followersCount}}</b> followers</p></span>
+        
+        <span (click)="toggleFollowingModal()">
+          <p><b>{{followingUsers.length}}</b> following</p>
+        </span>
+      </div>
+
+      <div>
+        <p><strong>{{userProfile?.firstName}} {{userProfile?.lastName}}</strong></p>
+        
+        <p>{{userProfile?.email}}</p>
+      </div>
+    </div>
 </div>
 
-<div *ngIf="followingUsers.length > 0" class="following-section">
-    <h3>Following:</h3>
+<div class="modal-overlay" *ngIf="isFollowingModalOpen" (click)="closeFollowingModal()"></div>
+<div class="modal" *ngIf="isFollowingModalOpen">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeFollowingModal()">&#x2715;</button>
+    <h3 style="margin-bottom: 20px;">Following</h3>
     <ul>
       <li *ngFor="let user of followingUsers">
-        <p (click)="seeProfile(user.id)">{{user.firstName}} {{user.lastName}}</p>
+        <p (click)="seeProfile(user.id)" style="margin-bottom: 8px; cursor: pointer;">{{ user.username }} <i>({{ user.firstName }} {{ user.lastName }})</i></p>
       </li>
     </ul>
   </div>
+</div>
+
+<hr style="margin-top: 5vh;border: 1px solid #4a1c49; margin-bottom: 10px;">
+
+<div class="post-thumbnails">
+  <div *ngFor="let post of posts" class="post-thumbnail">
+    <img 
+      *ngIf="post.image" 
+      [src]="post.image"
+      alt="Post Image" 
+      class="post-image" 
+      (click)="openPostModal(post)"
+    />
+  </div>
+</div>
+
+<div class="post-modal-overlay" *ngIf="isPostModalOpen" (click)="closePostModal()"></div>
+<div class="post-modal" *ngIf="isPostModalOpen">
+    <div class="post-elements">
+    <!-- Prikaz detalja posta -->
+      <div class="img-likes">
+
+        <div class="big-image-post">
+          <img 
+            *ngIf="selectedPost.image" 
+            [src]="selectedPost.image" 
+            alt="Post Image" 
+            class="big-image"
+          />
+        </div>
+        
+        <span style="display: flex; flex-direction: row;align-items: center; gap: 10px;">
+          <span style="display: flex; flex-direction: row;align-items: center;">
+            <button (click)="likePost(selectedPost.id)" class="like-button">
+              <img *ngIf="!isPostLiked(selectedPost.id)" src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
+              <img *ngIf="isPostLiked(selectedPost.id)" src="../../../../assets/dislike.png" alt="Dislike Icon" class="like-icon" />
+            </button>
+            
+            <p> {{ selectedPost.likeCount }}</p>
+          </span>
+          <span style="display: flex; flex-direction: row;align-items: center; gap: 5px;">
+            <!-- Forma za ažuriranje posta -->
+            <div *ngIf="updateFormVisibility[selectedPost.id]">
+              <div>
+                <label for="newDescription">New Description:</label>
+                <input [(ngModel)]="newPost.newDescription" id="newDescription" placeholder="Enter new description" />
+              </div>
+              <div>
+                <label for="newImage">New Image URL:</label>
+                <input [(ngModel)]="newPost.newImage" id="newImage" placeholder="Enter new image URL" />
+              </div>
+              <button (click)="updatePost(selectedPost.id)">Save</button>
+            </div>
+            <button (click)="deletePost(selectedPost.id)" *ngIf="loggedInUser.id === selectedPost.userId">Delete</button>
+            <button (click)="toggleUpdateForm(selectedPost.id)" *ngIf="loggedInUser.id === selectedPost.userId">Update</button>
+          </span>
+        </span>
+      </div>
+
+      <div class="comment-section-post">
+          <div>
+            <p class="description-post" (click)="seeProfile(selectedPost.userId)">{{ selectedPost.userId }}: {{ selectedPost.description }}</p>
+          </div>
+        
+        
+
+        <!-- Sekcija za komentare -->
+         <div >
+          <div class="all-comments" *ngIf="selectedPost.comments && selectedPost.comments.length > 0; else noComments">
+            <div *ngFor="let comment of selectedPost.comments" class="comment-card">
+              <p class="comment-author" (click)="seeProfile(comment.userId)"><b>{{ comment.authorName }}:</b> {{ comment.text }}</p>
+            </div>
+          </div>
+          <ng-template #noComments >
+            <p class="all-comments">No comments yet.</p>
+          </ng-template>
+
+            <div class="addComment">
+              <!-- Dodavanje komentara -->
+              <input class="comment-input-design" [(ngModel)]="newCommentText[selectedPost.id]" placeholder="Add a comment" />
+              <button class="comment-button-design" (click)="addComment(selectedPost.id)">Post</button>
+            </div>
+         </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+         ***************** Ostavila ako sluc skontamo da nesto ne radi **********************
+
+
+  <div *ngFor="let post of posts" class="post-card" >
+    <h2 (click)="seeProfile(post.userId)">{{ post.userId }}</h2>
+    <img *ngIf="post.image" [src]="post.image" alt="Post Image" class="post-image" />
+  
+    <h3>{{ post.description }}</h3>
+    <p>Likes: {{ post.likeCount }}</p>
+  
+    <button (click)="likePost(post.id)" class="like-button">
+      <img src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
+    </button>
+    <button (click)="deletePost(post.id)" *ngIf="loggedInUser.id === post.userId">Delete</button>
+    <button (click)="toggleUpdateForm(post.id)" *ngIf="loggedInUser.id === post.userId">Update</button>
+  
+    <div *ngIf="updateFormVisibility[post.id]">
+      <div>
+        <label for="newDescription">New Description:</label>
+        <input [(ngModel)]="newPost.newDescription" id="newDescription" placeholder="Enter new description" />
+      </div>
+      <div>
+        <label for="newImage">New Image URL:</label>
+        <input [(ngModel)]="newPost.newImage" id="newImage" placeholder="Enter new image URL" />
+      </div>
+      <button (click)="updatePost(post.id)">Save</button>
+    </div>
+  
+    <h4>Comments:</h4>
+    <div *ngIf="post.comments && post.comments.length > 0; else noComments">
+      <div *ngFor="let comment of post.comments" class="comment-card">
+        <p class="comment-author" (click)="seeProfile(comment.userId)">{{ comment.authorName }}: {{ comment.text }}</p>
+      </div>
+    </div>
+    <ng-template #noComments>
+      <p>No comments yet.</p>
+    </ng-template>
+  
+    <input [(ngModel)]="newCommentText[post.id]" placeholder="Add a comment" />
+    <button (click)="addComment(post.id)">Post Comment</button>
+    <hr>
+  </div>
+</div>
+-->

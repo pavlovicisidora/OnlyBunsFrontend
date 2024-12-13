@@ -43,6 +43,7 @@ export class PostCreateComponent implements OnInit {
 
       const user: UserProfile = {
         id:1,
+        username:"srki1503",
         firstName: "Srdjan",
         lastName: "Vukojevic",
         email: "srdjan@gmail.com",
