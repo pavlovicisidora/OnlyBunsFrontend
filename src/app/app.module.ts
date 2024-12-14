@@ -15,8 +15,6 @@ import { AuthenticationModule } from './feature-modules/authentication/authentic
 import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { AdministratorModule } from './feature-modules/administrator/administrator.module';
 import { PostAuthoringModule } from './feature-modules/post-authoring/post-authoring.module';
-import { MapComponent } from './shared/map/map/map.component';
-import { MapService } from './shared/map/map/map.service';
 
 
 @NgModule({
@@ -40,9 +38,10 @@ import { MapService } from './shared/map/map/map.service';
     AuthenticationModule,
     HttpClientModule,
     PostAuthoringModule,
+    
 
   ],
-  providers: [MapService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

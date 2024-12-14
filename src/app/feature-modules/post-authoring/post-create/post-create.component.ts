@@ -6,6 +6,7 @@ import { Location } from '../../authentication/model/location.model';
 import { UserProfile } from '../models/user-profile.model';
 import { RegisteredUser } from '../../administrator/models/registered-user';
 import { AuthenticationService } from '../../authentication/authentication.service';
+import { HttpClient } from '@angular/common/http'; 
 
 @Component({
   selector: 'app-post-create',
@@ -17,7 +18,11 @@ export class PostCreateComponent implements OnInit {
   previewUrl: string | null = null; // Za prikaz slike
   selectedFile: File | null = null; // Privremeno čuvanje fajla
   selectedCoordinates: { lat: number, lng: number } | null = null;
-  private marker?: L.Marker;
+  
+  SelectedLongitude: number = 0;
+  SelectedLatitude: number = 0;
+  SelectedCountry: string = '';
+  SelectedCity: string = '';
 
   loggedInUser: RegisteredUser = { 
     id: 0,
@@ -32,7 +37,8 @@ export class PostCreateComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private postAuthoringService: PostAuthoringService,
-    private userService: AuthenticationService
+    private userService: AuthenticationService,
+    private http: HttpClient
   ) {
     this.postForm = this.fb.group({
       description: ['', Validators.required],
@@ -41,7 +47,7 @@ export class PostCreateComponent implements OnInit {
       country: ['', Validators.required]
     });
   }
-
+  
   ngOnInit(): void {
     this.userService.getUserInfo().subscribe({
       next: (loggedInUser) => this.loggedInUser = loggedInUser,
@@ -63,17 +69,36 @@ export class PostCreateComponent implements OnInit {
     }
   }
  
+  reverseGeocode(lat: number, lng: number): void {
+    // Construct the Nominatim reverse geocoding URL
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`;
+
+    // Use HttpClient to make the request
+    this.http.get(url)
+      .subscribe((response: any) => {
+        const address = response.display_name;
+        this.SelectedCity = response.address.village || response.address.town || response.address.city;
+        this.SelectedCountry = response.address.country;
+
+        //console.log(`Address: ${address}`);
+        console.log(`City: ${ this.SelectedCity}`);
+        console.log(`Country: ${this.SelectedCountry}`);
+      }, error => {
+        console.error('Error during reverse geocoding:', error);
+      });
+  }
+
 
   onSubmit(): void {
     if (this.postForm.valid && this.selectedFile) {
       const formValues = this.postForm.value;
 
       const location: Location = {
-        id: 1,
-        longitude: 0,
-        latitude: 0,
-        country: formValues.country,
-        city: formValues.city
+        id: 0,
+        longitude: this.SelectedLongitude,
+        latitude: this.SelectedLatitude,
+        country: this.SelectedCountry,
+        city: this.SelectedCity
       };
 
      
@@ -131,9 +156,12 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  onCoordinatesSelected(event: { lat: number, lng: number }){
-   // this.selectedCoordinates = event.lat, event.;
-    console.log('Selected coordinates:', this.selectedCoordinates);
+  onMapClick(event: { lat: number, lng: number }) : void{
+    const { lat, lng } = event;
+    console.log(`Selected coordinates: Latitude ${lat}, Longitude ${lng}`);
+    this.SelectedLatitude = lat;
+    this.SelectedLongitude = lng;
+    this.reverseGeocode(lat,lng);
   }
 
 

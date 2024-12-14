@@ -10,19 +10,19 @@
             <input class="form-input" formControlName="image"  type="file" id="image" (change)="onFileSelected($event)">
         </div>
         <div class="image-preview" *ngIf="previewUrl">
-            <img [src]="previewUrl" alt="Selected Image" class="preview-image">
+            <img [src]="previewUrl" alt="" class="preview-image">
           </div>
         <div class="form-group">
             <label class="form-label" for="city">City:</label>
-            <input class="form-input" formControlName="city"  type="text" id="city" placeholder="Enter city...">
+            <input  [(ngModel)]="SelectedCity" class="form-input" formControlName="city"  type="text" id="city" placeholder="Enter city...">
         </div>
         <div class="form-group">
             <label class="form-label" for="country">Country:</label>
-            <input class="form-input" formControlName="country"  type="text" id="country" placeholder="Enter country">
+            <input [(ngModel)]="SelectedCountry" class="form-input" formControlName="country"  type="text" id="country" placeholder="Enter country">
         </div>
         <div class="form-group">
             <button class="form-button" type="submit" >Submit</button>
         </div>
     </form>
-    <xp-map (mapClicked)="onCoordinatesSelected($any($event))"></xp-map> 
+    <xp-map (mapClick)="onMapClick($event)"></xp-map>
 </div>
