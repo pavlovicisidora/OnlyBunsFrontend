@@ -42,9 +42,7 @@ export class PostCreateComponent implements OnInit {
   ) {
     this.postForm = this.fb.group({
       description: ['', Validators.required],
-      image: ['', Validators.required],
-      city: ['', Validators.required],
-      country: ['', Validators.required]
+      image: ['', Validators.required]
     });
   }
   
@@ -90,6 +88,7 @@ export class PostCreateComponent implements OnInit {
 
 
   onSubmit(): void {
+    
     if (this.postForm.valid && this.selectedFile) {
       const formValues = this.postForm.value;
 
@@ -118,17 +117,19 @@ export class PostCreateComponent implements OnInit {
       console.log(this.selectedFile.name)
 
       this.postAuthoringService.addImage(formData).subscribe({
-        next: (res) => {
-          console.log('added image' + res)
+        next: () => {
+          console.log('Slika je uspešno uploadovana');
 
-          
-          this.postAuthoringService.createNewPost(newPost).subscribe(() => {
-              console.log("Post created successfully!");
-              this.resetForm(); // Resetovanje forme nakon uspešne operacije
+          this.postAuthoringService.createNewPost(newPost).subscribe({
+            next: () =>{
+            console.log("Post created successfully!");
+            this.resetForm(); // Resetovanje forme nakon uspešne operacije
+            }
           });
         },
         error: (err) => {
-          console.error("Failed to upload image:", err);
+          console.error("Došlo je do greške prilikom uploadovanja slike:", err);
+          
         }
       });
     }

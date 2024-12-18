@@ -14,11 +14,11 @@
           </div>
         <div class="form-group">
             <label class="form-label" for="city">City:</label>
-            <input  [(ngModel)]="SelectedCity" class="form-input" formControlName="city"  type="text" id="city" placeholder="Enter city...">
+            <label class="form-input-reactive" id="city" >{{SelectedCity}}</label>
         </div>
         <div class="form-group">
             <label class="form-label" for="country">Country:</label>
-            <input [(ngModel)]="SelectedCountry" class="form-input" formControlName="country"  type="text" id="country" placeholder="Enter country">
+            <label class="form-input-reactive" id="country">{{SelectedCountry}}</label>
         </div>
         <div class="form-group">
             <button class="form-button" type="submit" >Submit</button>

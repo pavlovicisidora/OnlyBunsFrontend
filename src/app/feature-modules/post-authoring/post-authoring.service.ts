@@ -87,24 +87,31 @@ export class PostAuthoringService {
     return this.http.get<boolean>(`http://localhost:8080/api/posts/${postId}/isLiked`, { headers, params });
   }
 
-  createNewPost(newPost : PostCreation): Observable<PostCreation>{
+  createNewPost(post : PostCreation): Observable<void>{
     const token = localStorage.getItem("jwt");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
       'Accept': 'application/json'
     });
-    return this.http.post<PostCreation>(`http://localhost:8080/api/posts/create`, newPost, {headers});
+    const params = new HttpParams()
+    .set('userId', post.user.id.toString())
+    .set('postDescription', post.description)
+    .set('postImage', post.image)
+    .set('postTimeOfPublishing', post.timeOfPublishing.toISOString());
+    let location = post.location;
+    return this.http.post<void>(`http://localhost:8080/api/posts/create`, location, {headers,params});
   }
 
-  addImage(file: FormData) : Observable<string> {
+  addImage(file: FormData): Observable<void> {
     const token = localStorage.getItem("jwt");
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
       'Accept': 'application/json'
     });
-    
-    return this.http.post<string>(`http://localhost:8080/api/image`,file,{ headers });
-  } 
+  
+    // Pošaljite POST zahtev i samo pratite status
+    return this.http.post<void>(`http://localhost:8080/api/images`, file, { headers });
+  }
 
   getImage(pictureName: string): Observable<Blob>{
     const params = new HttpParams().set('filePath',pictureName);
