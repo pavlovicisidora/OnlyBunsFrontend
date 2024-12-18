@@ -7,7 +7,6 @@ import { TrendsComponent } from './ToImplement/trends/trends.component';
 import { ChatComponent } from './ToImplement/chat/chat.component';
 import { ForUComponent } from './ToImplement/for-u/for-u.component';
 import { AboutComponent } from './ToImplement/about/about.component';
-import { ProfileInfoComponent } from './ToImplement/profile-info/profile-info.component';
 
 @NgModule({
 declarations: [
@@ -16,8 +15,7 @@ declarations: [
     TrendsComponent,
     ChatComponent,
     ForUComponent,
-    AboutComponent,
-    ProfileInfoComponent
+    AboutComponent
 ],
 imports: [
     CommonModule,

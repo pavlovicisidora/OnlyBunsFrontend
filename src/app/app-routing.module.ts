@@ -14,7 +14,6 @@ import { ChatComponent } from './feature-modules/Layout/ToImplement/chat/chat.co
 import { MapComponent } from './shared/map/map.component';
 import { ForUComponent } from './feature-modules/Layout/ToImplement/for-u/for-u.component';
 import { AboutComponent } from './feature-modules/Layout/ToImplement/about/about.component';
-import { ProfileInfoComponent } from './feature-modules/Layout/ToImplement/profile-info/profile-info.component';
 const routes: Routes =[
     {path: '',component: HomeComponent},
     {path: 'home',component: HomeComponent},
@@ -29,8 +28,7 @@ const routes: Routes =[
     {path: 'chat', component: ChatComponent},
     {path: 'map', component: MapComponent},
     {path: 'forU', component:ForUComponent},
-    {path: 'about', component: AboutComponent},
-    {path: 'profileInfo', component: ProfileInfoComponent}
+    {path: 'about', component: AboutComponent}
     
 
 ];

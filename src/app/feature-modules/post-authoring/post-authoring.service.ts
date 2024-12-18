@@ -5,6 +5,7 @@ import { Post } from './models/post';
 import { UserProfile } from './models/user-profile.model';
 import { Comment } from './models/comment';
 import { PostCreation } from './models/postCreation';
+import { RegisteredUser } from '../administrator/models/registered-user';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,13 @@ export class PostAuthoringService {
 
   constructor(private http: HttpClient) { }
 
-  getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`http://localhost:8080/api/posts/all`);
+  getPosts(loggedInUser: RegisteredUser): Observable<Post[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<Post[]>(`http://localhost:8080/api/posts`, { headers });
   }
 
   getPostById(id: number): Observable<Post> {
@@ -103,6 +109,53 @@ export class PostAuthoringService {
   getImage(pictureName: string): Observable<Blob>{
     const params = new HttpParams().set('filePath',pictureName);
     return this.http.get<Blob>(`http://localhost:8080/api/image`,{params, responseType: 'blob' as 'json'});
+  }
+
+  followUser(userId: number): Observable<void> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.put<void>(`http://localhost:8080/api/users/follow/${userId}`, {}, { headers });
+  }
+
+  unfollowUser(userId: number): Observable<void> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.delete<void>(`http://localhost:8080/api/users/unfollow/${userId}`, { headers });
+  }
+
+  isFollowingUser(userId: number): Observable<boolean> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<boolean>(`http://localhost:8080/api/users/isFollowing/${userId}`, { headers });
+  }
+
+  getFollowingsAccounts(userId: number): Observable<UserProfile[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<UserProfile[]>(`http://localhost:8080/api/users/following/${userId}`, { headers });
+  }
+
+
+
+  getAllUsersPosts(userId: number): Observable<Post[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<Post[]>(`http://localhost:8080/api/posts/allUsersPosts/${userId}`, { headers });
   }
 
 }
