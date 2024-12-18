@@ -1,13 +1,13 @@
 import { Time } from "@angular/common";
 import { Location } from "../../authentication/model/location.model";
-import { UserProfile } from "./user-profile.model";
+import { RegisteredUser } from "../../administrator/models/registered-user";
 
 export interface PostCreation {
-    user: UserProfile,
+    user: RegisteredUser,
     description: string,
     image: string,
     location: Location,
     timeOfPublishing: Date,
-    isDelted: boolean
+    isDeleted: boolean
   }
   

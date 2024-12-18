@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http'; // Import HttpClientMod
 import { AdministratorModule } from './feature-modules/administrator/administrator.module';
 import { PostAuthoringModule } from './feature-modules/post-authoring/post-authoring.module';
 
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,6 +38,7 @@ import { PostAuthoringModule } from './feature-modules/post-authoring/post-autho
     AuthenticationModule,
     HttpClientModule,
     PostAuthoringModule,
+    
 
   ],
   providers: [],
