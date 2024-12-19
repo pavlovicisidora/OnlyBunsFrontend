@@ -1,1 +1,135 @@
-<p>trends works!</p>
+<div class="main-trends-div">
+    <h1 class="h1-trends">TRENDS</h1>
+    <div class="number-of-posts">
+        <div class="numbers">
+            <p style="font-size: 18px;">Posts on website:</p>
+            <p class="big-number">{{countOfAllPosts}}</p>
+        </div>
+
+        <div class="vertical-line"></div>
+
+        <div class="numbers">
+            <p style="font-size: 18px;">This Month's Posts:</p>
+            <p class="big-number">{{countOfPostsThisMonth}}</p>
+        </div>
+    </div>
+
+    <div class="frame-div">
+        <div 
+          class="frame-view" 
+          [ngClass]="{'frame-hover': selectedFrame === 0}" 
+          (click)="selectFrame(0)">
+            Top 5 Most Liked Posts (past 7 days)
+        </div>
+    
+        <div 
+          class="frame-view" 
+          [ngClass]="{'frame-hover': selectedFrame === 1}" 
+          (click)="selectFrame(1)">
+            Top 10 Most Liked Posts Of All Times
+        </div>
+    
+        <div 
+          class="frame-view" 
+          [ngClass]="{'frame-hover': selectedFrame === 2}" 
+          (click)="selectFrame(2)">
+            Top 10 Trend Followers This Week
+        </div>
+    </div>
+
+    <ng-container *ngIf="selectedFrame === 0">
+    <div class="post" *ngFor="let p of posts">
+        <div class="user-info">
+            <p (click)="seeProfile(p.userId)"  style="cursor: pointer;">&#64;{{usernames[p.userId]}}</p>
+        </div>
+        <div class="post-image">
+            <img 
+            *ngIf="p.image" 
+            [src]="p.image" 
+            alt="Post Image" 
+            class="big-image"
+          />
+        </div>
+        <div class="post-actions">
+            <div class="like-count">
+                <button (click)="likePost(p.id)" class="like-button">
+                    <img *ngIf="!isPostLiked(p.id)" src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
+                    <img *ngIf="isPostLiked(p.id)" src="../../../../assets/dislike.png" alt="Dislike Icon" class="like-icon" />
+                </button>
+                {{ p.likeCount }}
+                <button  class="like-button" (click)="openCommentsModal(p)">
+                    <img  src="../../../../assets/comments.png" alt="Dislike Icon" class="comment-icon" />
+                </button>
+            </div>
+            <span><p class="location"><b style="color: #FF7A33;">in</b> {{p.location.city}}, {{ p.location.country }}</p></span>
+        </div>
+        <div class="description-post">
+            <p><b (click)="seeProfile(p.userId)" style="cursor: pointer;">{{usernames[p.userId]}}:</b> {{p.description}}</p>
+        </div>
+
+    </div>
+</ng-container>
+
+
+<ng-container *ngIf="selectedFrame === 1">
+    <div class="post" *ngFor="let p of posts">
+        <div class="user-info">
+            <p (click)="seeProfile(p.userId)" style="cursor: pointer;">&#64;{{usernames[p.userId]}}</p>
+        </div>
+        <div class="post-image">
+            <img 
+            *ngIf="p.image" 
+            [src]="p.image" 
+            alt="Post Image" 
+            class="big-image"
+          />
+        </div>
+        <div class="post-actions">
+            <div class="like-count">
+                <button (click)="likePost(p.id)" class="like-button">
+                    <img *ngIf="!isPostLiked(p.id)" src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
+                    <img *ngIf="isPostLiked(p.id)" src="../../../../assets/dislike.png" alt="Dislike Icon" class="like-icon" />
+                </button>
+                {{ p.likeCount }}
+                <button  class="like-button" (click)="openCommentsModal(p)">
+                    <img  src="../../../../assets/comments.png" alt="Dislike Icon" class="comment-icon" />
+                </button>
+            </div>
+            <span><p class="location"><b style="color: #FF7A33;">in</b> {{p.location.city}}, {{ p.location.country }}</p></span>
+        </div>
+        <div class="description-post">
+            <p (click)="seeProfile(p.userId)"><b (click)="seeProfile(p.userId)" style="cursor: pointer;">{{usernames[p.userId]}}:</b> {{p.description}}</p>
+        </div>
+
+    </div>
+</ng-container> 
+
+<ng-container *ngIf="selectedFrame === 2">
+    <div class="post" *ngFor="let u of users">
+        <p (click)="seeProfile(u.id)" style="cursor: pointer;margin-top: 10px;margin-bottom: 20px;"><b>&#64;{{u.username}}</b> ({{u.firstName}} {{u.lastName}})</p>
+    </div>
+</ng-container> 
+
+    <!-- Modalni prozor -->
+    <div class="modal" *ngIf="isCommentsModalOpen" (click)="closeCommentsModal()"></div>
+        <div class="modal-content" *ngIf="isCommentsModalOpen">
+            <span class="close-button" (click)="closeCommentsModal()">&times;</span>
+            <h2 style="justify-self: center; margin-bottom: 15px;">Comments</h2>
+            <div class="all-comments" *ngIf="selectedPost.comments && selectedPost.comments.length > 0; else noComments">
+                <div *ngFor="let comment of selectedPost.comments" class="comment-card">
+                  <p class="comment-author" (click)="seeProfile(comment.userId)"><b>{{ comment.authorName }}:</b> {{ comment.text }}</p>
+                </div>
+              </div>
+              <ng-template #noComments >
+                <p class="all-comments">No comments yet.</p>
+              </ng-template>
+    
+                <div class="addComment">
+                  <!-- Dodavanje komentara -->
+                  <input class="comment-input-design" [(ngModel)]="newCommentText[selectedPost.id]" placeholder="Add a comment" />
+                  <button class="comment-button-design" (click)="addComment(selectedPost.id)">Post</button>
+                </div>
+        </div>
+    
+
+</div>
