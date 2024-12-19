@@ -333,8 +333,8 @@
 
 .follow-button:hover{
   width: 120px;
-  background-color: #99e1d9;
-  border: 1px solid #99e1d9;
+  background-color: #CC8EBF;
+  border: 1px solid #CC8EBF;
   border-radius: 10px;
   color: #4a1c49;
   padding: 5px;
@@ -345,8 +345,8 @@
 
 .unfollow-button:hover{
   width: 120px;
-  background-color: #99e1d9;
-  border: 1px solid #99e1d9;
+  background-color: #CC8EBF;
+  border: 1px solid #CC8EBF;
   border-radius: 10px;
   color: #4a1c49;
   padding: 5px;
