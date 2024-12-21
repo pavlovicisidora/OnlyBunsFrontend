@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../authentication/authentication.service'; 
 import { Observable } from 'rxjs';
+import { UserProfile } from '../../post-authoring/models/user-profile.model';
 
 @Component({
   selector: 'app-navbar',
@@ -10,13 +11,15 @@ import { Observable } from 'rxjs';
 export class NavbarComponent implements OnInit {
   
   currentUser: any; // Varijabla koja će držati korisničke podatke
-
+  
   constructor(private authService: AuthenticationService) {
   }
 
   ngOnInit(): void{
-    this.authService.currentUser$.subscribe( (user) => {this.currentUser = user});
-    console.log(this.currentUser);
+    
+    
+    this.authService.currentUser$.subscribe( (user) => {this.currentUser = user; console.log(this.currentUser);});
+    
     
   }
 

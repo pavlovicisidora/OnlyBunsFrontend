@@ -1,3 +1,5 @@
+import { Role } from "./role";
+
 export interface UserProfile{
     id:number;
     username:string;
@@ -5,6 +7,7 @@ export interface UserProfile{
     lastName: string;
     email: string;
     postCount: number;
+    role: Role;
     followersCount: number;
   }
   

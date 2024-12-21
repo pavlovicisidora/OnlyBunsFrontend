@@ -19,6 +19,10 @@ export class UserProfileComponent implements OnInit {
     lastName: '',
     email: '',
     postCount: 0,
+    role: {
+      id: 0,
+      name:'',
+    },
     followersCount: 0,
   };
   followingUsers: UserProfile[] = [];
