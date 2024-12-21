@@ -22,6 +22,10 @@ export class TrendsComponent {
       lastName: '',
       email: '',
       postCount: 0,
+      role: {
+        id: 0,
+        name:'',
+      },
       followersCount: 0,
     };
 

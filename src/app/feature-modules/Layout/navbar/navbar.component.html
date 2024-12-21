@@ -15,6 +15,6 @@
         <button class="menu-buttons" [routerLink]="['posts-view']">Posts</button> | 
         <button class="menu-buttons" [routerLink]="['about']">About</button> | 
         <button class="menu-buttons" [routerLink]="['user-profile']" *ngIf="currentUser !== null">Profile</button> <span *ngIf="currentUser !== null">|</span>
-        <button class="menu-buttons" [routerLink]="['create-post']">Post</button> 
+        <button class="menu-buttons" [routerLink]="['create-post']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">Post</button> 
     </div>
 </div>
