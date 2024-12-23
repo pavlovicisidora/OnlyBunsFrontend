@@ -2,11 +2,13 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RegisteredUsersViewComponent } from './registered-users-view/registered-users-view.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AppAnalyticsComponent } from './app-analytics/app-analytics.component';
 
 
 @NgModule({
 declarations: [
-    RegisteredUsersViewComponent
+    RegisteredUsersViewComponent,
+    AppAnalyticsComponent
 ],
 imports: [
     CommonModule,
