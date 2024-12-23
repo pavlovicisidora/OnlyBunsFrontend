@@ -2,8 +2,8 @@ import { Component, OnInit, } from '@angular/core';
 import { Post } from '../models/post';
 import { PostAuthoringService } from '../post-authoring.service';
 import { Router } from '@angular/router';
-import { RegisteredUser } from '../../administrator/models/registered-user';
 import { AuthenticationService } from '../../authentication/authentication.service';
+import { UserProfile } from '../models/user-profile.model';
 
 @Component({
   selector: 'app-post',
@@ -18,13 +18,15 @@ export class PostComponent implements OnInit {
     newImage: ''
   };
   updateFormVisibility: { [postId: number]: boolean } = {}; 
-  loggedInUser: RegisteredUser = { 
+  loggedInUser: UserProfile = { 
     id: 0,
     firstName: '',
     lastName: '',
+    username: '',
     email: '',
     postCount: 0,
     followersCount: 0,
+    role: { id: 0, name: ''}
   };
   isLiked: boolean | null = null;
 

@@ -5,8 +5,8 @@
   <h3>{{ post.description }}</h3>
   <p>Likes: {{ post.likeCount }}</p>
 
-  <button (click)="likePost(post.id)" class="like-button">
-    <img src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
+  <button (click)="likePost(post.id)" class="like-button" *ngIf="loggedInUser.role.name === 'ROLE_USER'">
+    <img src="../../../../assets/like.png" alt="Like Icon" class="like-icon"/>
   </button>
   <button (click)="deletePost(post.id)" *ngIf="loggedInUser.id === post.userId">Delete</button>
   <button (click)="toggleUpdateForm(post.id)" *ngIf="loggedInUser.id === post.userId">Update</button>
@@ -33,7 +33,7 @@
     <p>No comments yet.</p>
   </ng-template>
 
-  <input [(ngModel)]="newCommentText[post.id]" placeholder="Add a comment" />
-  <button (click)="addComment(post.id)">Post Comment</button>
+  <input [(ngModel)]="newCommentText[post.id]" *ngIf="loggedInUser.role.name === 'ROLE_USER'" placeholder="Add a comment" />
+  <button (click)="addComment(post.id)" *ngIf="loggedInUser.role.name === 'ROLE_USER'">Post Comment</button>
   <hr>
 </div>
