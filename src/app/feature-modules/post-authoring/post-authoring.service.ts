@@ -42,6 +42,20 @@ export class PostAuthoringService {
     return this.http.post<Post>(`http://localhost:8080/api/posts/${postId}/like`, {}, { headers, params });
   }
 
+  canUserComment(userId: number):Observable<Boolean>{
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+
+    const params = new HttpParams()
+    .set('userId', userId.toString());
+
+    return this.http.get<Boolean>(`http://localhost:8080/api/posts/canComment`,{headers, params});
+
+  }
+
   addComment(postId: number, userId: number, content: string): Observable<Comment> {
     const token = localStorage.getItem("jwt");
     const headers = new HttpHeaders({

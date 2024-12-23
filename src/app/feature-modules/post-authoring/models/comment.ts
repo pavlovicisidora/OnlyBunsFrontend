@@ -3,5 +3,6 @@ export interface Comment {
     userId: number;
     text: string;
     authorName: string;
+    createdAt : Date;
   }
   
