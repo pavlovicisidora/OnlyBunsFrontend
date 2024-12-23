@@ -1,1 +1,38 @@
-<p>app-analytics works!</p>
+<div class="analytics-container">
+    <h1>Application Analytics</h1>
+
+    <div class="user-activity-chart">
+      <h2>User Activity</h2>
+      <canvas id="userActivityChart"></canvas>
+    </div>
+
+    <div class="filter-section">
+      <h2>Posts and Comments Analytics</h2>
+      <label for="interval">Select Interval:</label>
+      <select id="interval" [(ngModel)]="selectedInterval">
+        <option *ngFor="let option of intervalOptions" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+  
+      <label for="startDate">Start Date:</label>
+      <input id="startDate" type="date" [(ngModel)]="startDate">
+  
+      <label for="endDate">End Date:</label>
+      <input id="endDate" type="date" [(ngModel)]="endDate">
+  
+      <button (click)="fetchAnalytics()">Get Analytics</button>
+    </div>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+  
+    <div class="analytics-list" *ngIf="analyticsData">
+        <div class="interval-item" *ngFor="let interval of getKeys(analyticsData.posts)">
+          <h3>{{ interval }}</h3>
+          <p>Number of Posts: {{ analyticsData.posts[interval] || 0 }}</p>
+          <p>Number of Comments: {{ analyticsData.comments[interval] || 0 }}</p>
+        </div>
+    </div>
+  </div>

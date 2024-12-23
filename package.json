@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "chart.js": "^4.4.7",
     "leaflet": "^1.9.4",
     "nominatim-client": "^3.2.1",
     "rxjs": "~7.8.0",
