@@ -113,9 +113,18 @@ export class PostAuthoringService {
     return this.http.post<void>(`http://localhost:8080/api/images`, file, { headers });
   }
 
-  getImage(pictureName: string): Observable<Blob>{
-    const params = new HttpParams().set('filePath',pictureName);
-    return this.http.get<Blob>(`http://localhost:8080/api/image`,{params, responseType: 'blob' as 'json'});
+  getImage(pictureURL: string): Observable<Blob>{
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    const params = new HttpParams().set('pictureURL',pictureURL);
+    return this.http.get('http://localhost:8080/api/images', {
+      headers, 
+      params, 
+      responseType: 'blob'  // Ovde eksplicitno postavljamo responseType kao 'blob'
+    });
   }
 
   followUser(userId: number): Observable<void> {
