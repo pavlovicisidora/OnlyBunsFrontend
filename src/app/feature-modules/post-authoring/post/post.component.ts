@@ -47,12 +47,16 @@ export class PostComponent implements OnInit {
   loadPosts() {
     console.log(this.loggedInUser);
     this.service.getPosts(this.loggedInUser).subscribe({
-      
-      next: (posts) => this.posts = posts,
+      next: (posts) => {
+        this.posts = posts;
+        this.posts.forEach(post => {
+          if (post.comments && post.comments.length > 0) {
+            post.comments.reverse();
+          }
+        });
+      },
       error: (err) => console.error('Error fetching posts:', err),
-      
     });
-
   }
 
   getImage(path: string): void {
@@ -134,17 +138,47 @@ export class PostComponent implements OnInit {
 
   addComment(postId: number) {
     const content = this.newCommentText[postId];
+    let isCommentable;
+  
+
+  /* JAKO JE SPORO, OBO JE DRUGI NACIN KOJI JE IZ NEKOG RAZLOGA JOS SPORIJI 
+  
+  const currentDate = new Date();
+    const oneHourAgo = new Date(currentDate.getTime() - 60 * 60 * 1000);
+
+    let commentsInLastHour = 0;
+    for( let post of this.posts){
+      for(let comment of post.comments){
+         if(comment.userId == this.loggedInUser.id && new Date(comment.createdAt) > oneHourAgo){
+
+          commentsInLastHour++;
+
+      }
+    }                         
+  } */          
+
     if (content) {
-      this.service.addComment(postId, this.loggedInUser.id, content).subscribe({
-        next: (newComment) => {
-          const post = this.posts.find(post => post.id === postId);
-          if (post) {
-            post.comments.push(newComment);
-            this.newCommentText[postId] = ''; 
+      this.service.canUserComment(this.loggedInUser.id).subscribe({
+        next: (canComment) => {
+          if (canComment){
+            this.service.addComment(postId, this.loggedInUser.id, content).subscribe({
+              next: (newComment) => {
+                const post = this.posts.find(post => post.id === postId);
+                if (post) {
+                  post.comments.unshift(newComment);
+                  this.newCommentText[postId] = ''; 
+                }
+              },
+              error: (err) => console.error('Error adding comment:', err)
+            });
+          }else{
+            alert('You achived maximum of 60 comments per hour!');
           }
         },
-        error: (err) => console.error('Error adding comment:', err)
+        error: (err) => console.error('Error checking if user can comment:', err)
       });
-    }
+    
+      
   }
+ }
 }
