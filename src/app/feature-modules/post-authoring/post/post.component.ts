@@ -30,6 +30,8 @@ export class PostComponent implements OnInit {
   };
   isLiked: boolean | null = null;
 
+  imageCache: { [path: string]: string } = {}; // Mapa za keširanje URL-ova slika
+
   constructor(private service: PostAuthoringService, private router: Router, private userService: AuthenticationService,) {}
 
   ngOnInit(): void {
@@ -39,15 +41,31 @@ export class PostComponent implements OnInit {
       next: (loggedInUser) => this.loggedInUser = loggedInUser,
       error: (err) => console.error('Error fetching loggedInUser:', err)
     });
+
   }
 
   loadPosts() {
     console.log(this.loggedInUser);
     this.service.getPosts(this.loggedInUser).subscribe({
+      
       next: (posts) => this.posts = posts,
-      error: (err) => console.error('Error fetching posts:', err)
+      error: (err) => console.error('Error fetching posts:', err),
+      
     });
+
   }
+
+  getImage(path: string): void {
+    console.log(path);
+    console.log(this.imageCache);
+    if (!this.imageCache[path]) {
+      this.service.getImage(path).subscribe(blob => {
+        const imageUrl = URL.createObjectURL(blob);
+        this.imageCache[path] = imageUrl;
+      });
+    }
+  }
+
 
   seeProfile(userId: number) {
     this.router.navigate(['/user-profile'], { queryParams: { id: userId } });

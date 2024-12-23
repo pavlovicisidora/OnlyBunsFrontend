@@ -1,6 +1,6 @@
 <div *ngFor="let post of posts" class="post-card" >
   <h2 (click)="seeProfile(post.userId)">{{ post.userId }}</h2>
-  <img *ngIf="post.image" [src]="post.image" alt="Post Image" class="post-image" />
+  <img *ngIf="post.image" [src]="imageCache[post.image] || getImage(post.image)" alt="Post Image" class="post-image" />
 
   <h3>{{ post.description }}</h3>
   <p>Likes: {{ post.likeCount }}</p>
