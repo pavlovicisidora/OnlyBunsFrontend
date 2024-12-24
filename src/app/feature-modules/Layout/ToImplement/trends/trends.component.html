@@ -45,7 +45,7 @@
         <div class="post-image">
             <img 
             *ngIf="p.image" 
-            [src]="p.image" 
+            [src]="imageCache[p.image] || getImage(p.image)"
             alt="Post Image" 
             class="big-image"
           />
@@ -79,7 +79,7 @@
         <div class="post-image">
             <img 
             *ngIf="p.image" 
-            [src]="p.image" 
+            [src]="imageCache[p.image] || getImage(p.image)"
             alt="Post Image" 
             class="big-image"
           />

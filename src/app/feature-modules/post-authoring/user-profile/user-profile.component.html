@@ -47,7 +47,7 @@
   <div *ngFor="let post of posts" class="post-thumbnail">
     <img 
       *ngIf="post.image" 
-      [src]="post.image"
+      [src]="imageCache[post.image] || getImage(post.image)"
       alt="Post Image" 
       class="post-image" 
       (click)="openPostModal(post)"
@@ -64,7 +64,7 @@
         <div class="big-image-post">
           <img 
             *ngIf="selectedPost.image" 
-            [src]="selectedPost.image" 
+            [src]="imageCache[selectedPost.image] || getImage(selectedPost.image)"
             alt="Post Image" 
             class="big-image"
           />
