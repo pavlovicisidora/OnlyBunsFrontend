@@ -39,6 +39,8 @@ export class TrendsComponent {
     selectedPost: any = null; 
     newCommentText: { [postId: number]: string } = {};
 
+    imageCache: { [path: string]: string } = {}; // Mapa za keširanje URL-ova slika
+
 
      constructor(
         private postService: PostAuthoringService, 
@@ -208,6 +210,17 @@ closeCommentsModal() {
   this.selectedPost = null;
 }
 
+
+getImage(path: string): void {
+  console.log(path);
+  console.log(this.imageCache);
+  if (!this.imageCache[path]) {
+    this.postService.getImage(path).subscribe(blob => {
+      const imageUrl = URL.createObjectURL(blob);
+      this.imageCache[path] = imageUrl;
+    });
+  }
+}
 
 
 }

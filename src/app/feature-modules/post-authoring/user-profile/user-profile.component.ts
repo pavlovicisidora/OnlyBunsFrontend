@@ -37,6 +37,7 @@ export class UserProfileComponent implements OnInit {
     };
     updateFormVisibility: { [postId: number]: boolean } = {};
     likedPosts: { [postId: number]: boolean } = {};
+    imageCache: { [path: string]: string } = {}; // Mapa za keširanje URL-ova slika
 
   /*********************/
   constructor(
@@ -127,6 +128,18 @@ export class UserProfileComponent implements OnInit {
 
 
   /////////////// POSTS /////////////////
+
+  getImage(path: string): void {
+    console.log(path);
+    console.log(this.imageCache);
+    if (!this.imageCache[path]) {
+      this.postService.getImage(path).subscribe(blob => {
+        const imageUrl = URL.createObjectURL(blob);
+        this.imageCache[path] = imageUrl;
+      });
+    }
+  }
+
   loadUsersPosts(userId: number): void {
     this.postService.getAllUsersPosts(userId).subscribe({
       next: (posts) => {
