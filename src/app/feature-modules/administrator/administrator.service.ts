@@ -40,4 +40,26 @@ export class AdministratorService {
 
     return this.http.get<any>(`http://localhost:8080/api/users/search`, { headers, params });
   }
+
+  getAnalytics(interval: string, startDate: string | null, endDate: string | null): Observable<any> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    });
+    let params = new HttpParams().set('interval', interval);
+    if (startDate) params = params.set('startDate', startDate);
+    if (endDate) params = params.set('endDate', endDate);
+
+    return this.http.get(`http://localhost:8080/api/analytics/posts-comments`, { headers, params });
+  }
+
+  getUserActivityStatistics(): Observable<any> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json'
+    });
+    return this.http.get<any>(`http://localhost:8080/api/analytics/user-activity`, { headers });
+  }
 }

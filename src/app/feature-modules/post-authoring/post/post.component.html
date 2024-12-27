@@ -1,5 +1,7 @@
-<div *ngFor="let post of posts" class="post-card" >
-  <h2 (click)="seeProfile(post.userId)">{{ post.userId }}</h2>
+<!--<div *ngFor="let post of posts" class="post-card" >
+  <div class="user-info">
+    <p (click)="seeProfile(post.userId)"  style="cursor: pointer;">&#64;{{usernames[post.userId]}}</p>
+</div>
   <img *ngIf="post.image" [src]="imageCache[post.image] || getImage(post.image)" alt="Post Image" class="post-image" />
 
   <h3>{{ post.description }}</h3>
@@ -8,20 +10,7 @@
   <button (click)="likePost(post.id)" class="like-button" *ngIf="loggedInUser.role.name === 'ROLE_USER'">
     <img src="../../../../assets/like.png" alt="Like Icon" class="like-icon"/>
   </button>
-  <button (click)="deletePost(post.id)" *ngIf="loggedInUser.id === post.userId">Delete</button>
-  <button (click)="toggleUpdateForm(post.id)" *ngIf="loggedInUser.id === post.userId">Update</button>
 
-  <div *ngIf="updateFormVisibility[post.id]">
-    <div>
-      <label for="newDescription">New Description:</label>
-      <input [(ngModel)]="newPost.newDescription" id="newDescription" placeholder="Enter new description" />
-    </div>
-    <div>
-      <label for="newImage">New Image URL:</label>
-      <input [(ngModel)]="newPost.newImage" id="newImage" placeholder="Enter new image URL" />
-    </div>
-    <button (click)="updatePost(post.id)">Save</button>
-  </div>
 
   <h4>Comments:</h4>
   <div *ngIf="post.comments && post.comments.length > 0; else noComments">
@@ -36,4 +25,62 @@
   <input [(ngModel)]="newCommentText[post.id]" *ngIf="loggedInUser.role.name === 'ROLE_USER'" placeholder="Add a comment" />
   <button (click)="addComment(post.id)" *ngIf="loggedInUser.role.name === 'ROLE_USER'">Post Comment</button>
   <hr>
+</div> -->
+
+
+<div class="main-trends-div">
+<div *ngFor="let post of posts" class="post">
+  <div class="user-info">
+      <p (click)="seeProfile(post.userId)"  style="cursor: pointer;">&#64;{{usernames[post.userId]}}</p>
+  </div>
+  <div class="post-image">
+    <img *ngIf="post.image" [src]="imageCache[post.image] || getImage(post.image)" alt="Post Image" class="post-image" />
+  </div>
+  <div class="post-actions">
+      <div class="like-count">
+        <div class="popup" >
+          <button (click)="likePost(post.id)" class="like-button">
+              <img *ngIf="!isPostLiked(post.id)" src="../../../../assets/like.png" alt="Like Icon" class="like-icon" />
+              <img *ngIf="isPostLiked(post.id)" src="../../../../assets/dislike.png" alt="Dislike Icon" class="like-icon" />
+          </button>
+          <span [ngClass]="{'show': isPopupVisible(post.id), 'popuptext': true}" id="myPopup" *ngIf="loggedInUser.role.name!=='ROLE_ADMIN'">Log in to like</span>
+          <span [ngClass]="{'show': isPopupVisible(post.id), 'popuptext': true}" id="myPopup" *ngIf="loggedInUser.role.name==='ROLE_ADMIN'">You can't like</span>
+        </div>
+          {{ post.likeCount }}
+          
+          <button  class="like-button" (click)="openCommentsModal(post)">
+              <img  src="../../../../assets/comments.png" alt="Dislike Icon" class="comment-icon" />
+          </button>
+      </div>
+      <span><p class="location"><b style="color: #FF7A33;">in</b> {{post.location.city}}, {{ post.location.country }}</p></span>
+  </div>
+  <div class="description-post">
+      <p><b (click)="seeProfile(post.userId)" style="cursor: pointer;">{{usernames[post.userId]}}:</b> {{post.description}}</p>
+  </div>
+
+</div>
+<div class="modal" *ngIf="isCommentsModalOpen" (click)="closeCommentsModal()"></div>
+<div class="modal-content" *ngIf="isCommentsModalOpen">
+    <span class="close-button" (click)="closeCommentsModal()">&times;</span>
+    <h2 style="justify-self: center; margin-bottom: 15px;">Comments</h2>
+    <div class="all-comments" *ngIf="selectedPost.comments && selectedPost.comments.length > 0; else noComments">
+        <div *ngFor="let comment of selectedPost.comments" class="comment-card">
+          <p class="comment-author" (click)="seeProfile(comment.userId)"><b>{{ comment.authorName }}:</b> {{ comment.text }}</p>
+        </div>
+      </div>
+      <ng-template #noComments >
+        <p class="all-comments">No comments yet.</p>
+      </ng-template>
+
+        <div class="addComment" *ngIf="loggedInUser.role.name === 'ROLE_USER'">
+          <input class="comment-input-design" [(ngModel)]="newCommentText[selectedPost.id]"  placeholder="Add a comment" />
+          <button class="comment-button-design" (click)="addComment(selectedPost.id)" >Post</button>
+        </div>
+        <div class="addComment" *ngIf="loggedInUser.role.name !== 'ROLE_USER' && loggedInUser.role.name !== 'ROLE_ADMIN'">
+          <p class="message-design">Log in to leave a comment</p>
+        </div>
+        <div class="addComment" *ngIf="loggedInUser.role.name === 'ROLE_ADMIN'">
+          <p class="message-design">You can't leave a comment</p>
+        </div>
+</div>
 </div>

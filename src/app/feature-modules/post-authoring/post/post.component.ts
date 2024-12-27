@@ -4,6 +4,8 @@ import { PostAuthoringService } from '../post-authoring.service';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { UserProfile } from '../models/user-profile.model';
+import { NgClass } from '@angular/common';
+import { popup } from 'leaflet';
 
 @Component({
   selector: 'app-post',
@@ -13,10 +15,6 @@ import { UserProfile } from '../models/user-profile.model';
 export class PostComponent implements OnInit {
   posts: Post[] = [];
   newCommentText: { [postId: number]: string } = {};
-  newPost: { newDescription: string, newImage: string } = {
-    newDescription: '',
-    newImage: ''
-  };
   updateFormVisibility: { [postId: number]: boolean } = {}; 
   loggedInUser: UserProfile = { 
     id: 0,
@@ -28,15 +26,17 @@ export class PostComponent implements OnInit {
     followersCount: 0,
     role: { id: 0, name: ''}
   };
-  isLiked: boolean | null = null;
-
+  //isLiked: boolean | null = null;
+  isCommentsModalOpen = false;
+  selectedPost: any = null; 
+  usernames: { [userId: number]: string } = {};
+  likedPosts: { [postId: number]: boolean } = {};
   imageCache: { [path: string]: string } = {}; // Mapa za keširanje URL-ova slika
 
   constructor(private service: PostAuthoringService, private router: Router, private userService: AuthenticationService,) {}
 
   ngOnInit(): void {
     this.loadPosts();
-
     this.userService.getUserInfo().subscribe({
       next: (loggedInUser) => this.loggedInUser = loggedInUser,
       error: (err) => console.error('Error fetching loggedInUser:', err)
@@ -49,6 +49,8 @@ export class PostComponent implements OnInit {
     this.service.getPosts(this.loggedInUser).subscribe({
       next: (posts) => {
         this.posts = posts;
+        this.posts.forEach(post => this.loadLikes(post.id)); // Učitaj status za svaki post
+        this.posts.forEach(post => this.fetchUsername(post.userId));
         this.posts.forEach(post => {
           if (post.comments && post.comments.length > 0) {
             post.comments.reverse();
@@ -56,6 +58,15 @@ export class PostComponent implements OnInit {
         });
       },
       error: (err) => console.error('Error fetching posts:', err),
+    });
+  }
+
+  fetchUsername(userId: number): void {
+    this.service.getUserProfile(userId).subscribe({
+      next: (user: UserProfile) => {
+        this.usernames[userId] = user.username; 
+      },
+      error: (err) => console.error('Error fetching user profile:', err)
     });
   }
 
@@ -75,66 +86,46 @@ export class PostComponent implements OnInit {
     this.router.navigate(['/user-profile'], { queryParams: { id: userId } });
   }
 
-  toggleUpdateForm(postId: number) {
-    this.updateFormVisibility[postId] = !this.updateFormVisibility[postId];
-    if (!this.updateFormVisibility[postId]) {
-      this.newPost.newDescription = '';
-      this.newPost.newImage = '';
-    }
-  }
-
-  updatePost(postId: number) {
-    const post = this.posts.find(p => p.id === postId);
-    if (post) {
-      this.service.updatePost(postId, this.loggedInUser.id, this.newPost.newDescription, this.newPost.newImage).subscribe({
-        next: () => {
-          post.description = this.newPost.newDescription;
-          post.image = this.newPost.newImage;
-          this.newPost.newDescription = '';
-          this.newPost.newImage = '';
-          this.updateFormVisibility[postId] = false;
-          this.posts = [...this.posts];
-        },
-        error: (err) => console.error('Error updating post:', err)
-      });
-    }
-  }
+ 
 
   likePost(postId: number) {
-      this.isPostLiked(postId);
+    if(this.loggedInUser.role.name === "ROLE_USER"){
+     const isLiked = this.likedPosts[postId] || false; // Proverava trenutni status
       this.service.likePost(postId, this.loggedInUser.id).subscribe({
         next: () => {
           const post = this.posts.find(p => p.id === postId);
-          if (post && this.isLiked) {
-            post.likeCount -= 1;
-            this.isLiked = null;
-          }
-          else if(post && !this.isLiked) {
-            post.likeCount += 1;
-            this.isLiked = null;
+          if (post) {
+            // Menjanje broja lajkova i statusa
+            if (isLiked) {
+              post.likeCount -= 1;
+              this.likedPosts[postId] = false;
+            } else {
+              post.likeCount += 1;
+              this.likedPosts[postId] = true;
+            }
           }
         },
         error: (err) => console.error('Error liking post:', err)
       });
+    }
+    else{
+      this.togglePopup(postId);
+    }
   }
 
-  isPostLiked(postId: number) {
+  loadLikes(postId: number): void {
     this.service.isPostLiked(postId, this.loggedInUser.id).subscribe({
-      next: (response) => {
-        this.isLiked = response;
+      next: (response: boolean) => {
+        this.likedPosts[postId] = response; // Postavi status lajkovanja za post
       },
-      error: (err) => console.error('Error liking post:', err)
-    });
-}
-  
-  deletePost(postId: number) {
-    this.service.deletePost(postId, this.loggedInUser.id).subscribe({
-      next: () => {
-        this.posts = this.posts.filter(post => post.id !== postId);
-      },
-      error: (err) => console.error('Error deleting post:', err)
+      error: (err) => console.error('Error checking like status:', err)
     });
   }
+
+  isPostLiked(postId: number): boolean {
+    return this.likedPosts[postId] || false; 
+  }
+  
 
   addComment(postId: number) {
     const content = this.newCommentText[postId];
@@ -181,4 +172,28 @@ export class PostComponent implements OnInit {
       
   }
  }
+
+ popupStates: Map<number, boolean> = new Map();
+
+ togglePopup(postId: number): void {
+   const currentState = this.popupStates.get(postId) || false;
+   this.popupStates.set(postId, !currentState);
+ }
+ 
+ isPopupVisible(postId: number): boolean {
+   return this.popupStates.get(postId) || false;
+ }
+
+
+
+
+ openCommentsModal(post: any) {
+  this.selectedPost = post;
+  this.isCommentsModalOpen = true;
+}
+
+closeCommentsModal() {
+  this.isCommentsModalOpen = false;
+  this.selectedPost = null;
+}
 }
