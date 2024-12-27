@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { Location } from './model/location.model';
 import { Registration } from './model/user-registration.model';
@@ -105,6 +105,19 @@ export class AuthenticationService {
     });
 
     return this.http.get<UserProfile>('http://localhost:8080/api/users/userInfo', {headers});
+  }
+
+  updateLastLogin(userId: number): Observable<void> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+
+    const params = new HttpParams()
+    .set('userId', userId);
+
+    return this.http.post<void>('http://localhost:8080/api/users/lastLogin/update',{params, headers});
   }
 
   tokenIsPresent() {

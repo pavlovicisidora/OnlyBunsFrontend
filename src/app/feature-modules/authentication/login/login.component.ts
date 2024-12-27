@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../authentication.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { RegisteredUser } from '../../administrator/models/registered-user';
 
 interface DisplayMessage {
   msgType: string;
@@ -15,7 +16,15 @@ interface DisplayMessage {
 })
 export class LoginComponent implements OnInit{
 
-
+   loggedInUser: RegisteredUser = { 
+      id: 0,
+      firstName: '',
+      lastName: '',
+      email: '',
+      postCount: 0,
+      followersCount: 0,
+    };
+    
   loginForm: FormGroup;
   errorMessage: string | null = null;
   ngOnInit(): void {}
@@ -41,14 +50,17 @@ export class LoginComponent implements OnInit{
         next: (response) => {
           // Ako je login uspešan, spremite token u lokalnu memoriju
           localStorage.setItem('jwt', response.accessToken);
-          // Redirektujte korisnika na home stranicu ili neku drugu stranicu
+          console.log('Token set in localStorage:', response.accessToken);
           this.router.navigate(['/home']);
+          // Redirektujte korisnika na home stranicu ili neku drugu stranicu
+          
         },
         error: (error) => {
           this.errorMessage = 'Invalid username or password';
           console.error('Login error:', error);
         }
       });
+
     }
   }
 }
