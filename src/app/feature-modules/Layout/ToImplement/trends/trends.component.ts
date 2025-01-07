@@ -26,6 +26,13 @@ export class TrendsComponent {
         id: 0,
         name:'',
       },
+      location:{
+        id: 0,
+        longitude: 0,
+        latitude: 0,
+        country: '',
+        city: '',
+      },
       followersCount: 0,
     };
 

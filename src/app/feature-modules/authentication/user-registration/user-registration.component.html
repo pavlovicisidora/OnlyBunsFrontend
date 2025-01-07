@@ -1,48 +1,86 @@
-<form [formGroup]="registrationForm">
-  <div>
-    <!-- First Name -->
-    <div>
-      <label for="firstName">First Name</label>
-      <input id="firstName" formControlName="firstName" type="text" />
-    </div>
-
-    <!-- Last Name -->
-    <div>
-      <label for="lastName">Last Name</label>
-      <input id="lastName" formControlName="lastName" type="text" />
-    </div>
-
-    <!-- Username -->
-    <div>
-      <label for="username">Username</label>
-      <input id="username" formControlName="username" type="text" />
-    </div>
-
-    <!-- Email -->
-    <div>
-      <label for="email">Email</label>
-      <input id="email" formControlName="email" type="text" />
-    </div>
-
-    <!-- Password -->
-    <div>
-      <label for="password">Password</label>
-      <input id="password" formControlName="password" type="password" />
-    </div>
-
-    <!-- Location Dropdown or New Location Fields -->
-    <div>
-      <label for="locationId">Location</label>
-      <select id="locationId" formControlName="location" (change)="loadLocations()">
-        <option *ngFor="let loc of availableLocations" [value]="loc.id">
-          {{ loc.city }}, {{ loc.country }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Submit Button -->
-    <div>
-      <button type="submit" (click)="registerUser()">Register</button>
-    </div>
+<div class="form-div"  id="formErrorSection" >
+  <h1 style="color: #3B163B; margin-bottom: 25px;">Sign up</h1>
+  <div *ngIf="showFormError" class="form-error">
+    <small class="error-text">You have to fill in all the parts of the form</small>
   </div>
-</form>
+  <form [formGroup]="registrationForm">
+    <div>
+      <div class="row-div">
+        <!-- First Name -->
+        <div class="colum-div">
+          <label for="firstName" class="label-design">
+            First Name <span *ngIf="isFieldInvalid('firstName')" class="error-star">*</span>
+          </label>
+          <input class="input-design" id="firstName" formControlName="firstName" type="text" />
+        </div>
+
+        <!-- Last Name -->
+        <div class="colum-div">
+          <label for="lastName" class="label-design">
+            Last Name <span *ngIf="isFieldInvalid('lastName')" class="error-star">*</span>
+          </label>
+          <input class="input-design" id="lastName" formControlName="lastName" type="text" />
+        </div>
+      </div>
+
+      <div class="row-div">
+        <!-- Username -->
+        <div class="colum-div">
+          <label for="username" class="label-design">
+            Username <span *ngIf="isFieldInvalid('username')" class="error-star">*</span>
+          </label>
+          <input class="input-design" id="username" formControlName="username" type="text" />
+        </div>
+
+        <!-- Email -->
+        <div class="colum-div">
+          <label for="email" class="label-design">
+            Email <span *ngIf="isFieldInvalid('email')" class="error-star">*</span>
+          </label>
+          <input class="input-design" id="email" formControlName="email" type="text" />
+          <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+            <small class="error-text">Enter a valid email (e.g. youremail&#64;gmail.com)</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-div">
+        <!-- Password -->
+        <div class="colum-div">
+          <label for="password" class="label-design">
+            Password <span *ngIf="isFieldInvalid('password')" class="error-star">*</span>
+          </label>
+          <input class="input-design" id="password" formControlName="password" type="password" />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="colum-div">
+          <label for="confirmPassword" class="label-design">
+            Confirm Password <span *ngIf="isFieldInvalid('confirmPassword')" class="error-star">*</span>
+          </label>
+          <input class="input-design" id="confirmPassword" formControlName="confirmPassword" type="password" />
+          <div *ngIf="showPasswordMismatchError()">
+            <small class="error-text">Passwords do not match.</small>
+          </div>
+        </div>
+      </div>
+      <!-- Location Dropdown or New Location Fields -->
+      <div class="row-div">
+        <div class="colum-div">
+          <label class="label-design" for="city">City</label>
+          <label class="input-design" id="city" >{{SelectedCity}}</label>
+      </div>
+      <div class="colum-div">
+          <label class="label-design" for="country" >Country</label>
+          <label class="input-design"  id="country">{{SelectedCountry}}</label>
+      </div>
+      </div>
+
+      <xp-map (mapClick)="onMapClick($event)"></xp-map>
+      <!-- Submit Button -->
+      <div>
+        <button class="submit-css" type="submit" (click)="registerUser()">Register</button>
+      </div>
+    </div>
+  </form>
+</div>

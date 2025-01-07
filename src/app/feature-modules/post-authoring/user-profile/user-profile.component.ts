@@ -23,9 +23,17 @@ export class UserProfileComponent implements OnInit {
       id: 0,
       name:'',
     },
+    location:{
+      id: 0,
+      longitude: 0,
+      latitude: 0,
+      country: '',
+      city: '',
+    },
     followersCount: 0,
   };
   followingUsers: UserProfile[] = [];
+  followerUsers: UserProfile[] = [];
   isFollowing: boolean = false;
   userId: number = 0;
   /********** Posts ***********/
@@ -70,6 +78,7 @@ export class UserProfileComponent implements OnInit {
         this.userProfile = profile;
         this.checkIfFollowing(userId);
         this.loadFollowingUsers(userId);
+        this.loadFollowersUsers(userId);
       },
       error: (err) => console.error('Error fetching user profile:', err)
     });
@@ -83,6 +92,13 @@ export class UserProfileComponent implements OnInit {
   loadFollowingUsers(userId: number): void {
     this.postService.getFollowingsAccounts(userId).subscribe({
       next: (users) => this.followingUsers = users,
+      error: (err) => console.error('Error fetching following users:', err)
+    });
+  }
+
+  loadFollowersUsers(userId: number): void {
+    this.postService.getFollowersAccounts(userId).subscribe({
+      next: (users) => this.followerUsers = users,
       error: (err) => console.error('Error fetching following users:', err)
     });
   }
@@ -255,6 +271,16 @@ export class UserProfileComponent implements OnInit {
 
   closeFollowingModal() {
     this.isFollowingModalOpen = false;
+  }
+
+  isFollowersModalOpen: boolean = false;
+
+  toggleFollowersModal() {
+    this.isFollowersModalOpen = !this.isFollowingModalOpen;
+  }
+
+  closeFollowersModal() {
+    this.isFollowersModalOpen = false;
   }
 
 }

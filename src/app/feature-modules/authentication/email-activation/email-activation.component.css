@@ -1,0 +1,47 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+.main-div{
+    background-color: white;
+    width: 72%;
+    min-height: 84%;
+    margin: auto;
+}
+
+.activation{
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    justify-items: center;
+    width: 80%;
+    align-items: center;
+}
+
+.header1{
+    margin-bottom: 30px;
+}
+
+.header2{
+    margin-top: 15vh;
+}
+
+.activation-button{
+    margin-top: 20px;
+    width: 27%;
+    padding: 18px;
+    border: 2px solid #3B163B;
+    border-radius: 30px;
+    font-size: 16px;
+    background-color: #3B163B;
+    font-weight: bold;
+    color: #CC8EBF;
+    cursor: pointer;
+}
+
+.activation-button:hover{
+    background-color: #CC8EBF;
+    font-weight: bold;
+    color: #3B163B;
+}

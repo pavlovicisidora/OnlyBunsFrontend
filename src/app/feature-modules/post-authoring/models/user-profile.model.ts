@@ -1,5 +1,5 @@
 import { Role } from "./role";
-
+import { Location } from "../../authentication/model/location.model";
 export interface UserProfile{
     id:number;
     username:string;
@@ -8,6 +8,7 @@ export interface UserProfile{
     email: string;
     postCount: number;
     role: Role;
+    location: Location;
     followersCount: number;
   }
   

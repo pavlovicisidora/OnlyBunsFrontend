@@ -1,0 +1,90 @@
+.form-div{
+    padding: 30px;
+    background-color: rgb(255, 255, 255, 0.6);
+    backdrop-filter: blur(50px);
+    width: 100vh;
+    height: 140%;
+    border-radius: 15px;
+    box-shadow: 1px 1px 20px 1px rgba(255, 255, 255, 0.505);
+    border: 1px solid white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 8vh;
+    margin-bottom: 8vh;
+}
+
+
+.colum-div{
+    display: flex;
+    flex-direction: column;
+}
+
+.row-div{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+    gap: 50px;
+}
+
+.input-design{
+    width: 250px;
+    height: 30px;
+    border-radius: 25px;
+    border:2px solid #3B163B;
+    padding: 5px;
+    background-color: rgb(255, 255, 255, 0.4);
+}
+
+.label-design{
+    font-size: 17px;
+    font-weight: bold;
+    color: #3B163B;
+}
+
+.submit-css{
+    width: 180px;
+    height: 40px;
+    border-radius: 25px;
+    background-color: #3B163B;
+    border: 1px solid #3B163B;
+    font-weight: bold;
+    color: #CC8EBF;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    padding: 12px;
+    margin-top: 20px;
+}
+
+.submit-css:hover{
+    background-color: #CC8EBF;
+    color: #3B163B;
+}
+
+.error-text{
+    color: red;
+    display: flex;
+    justify-content: center;
+    margin-bottom: -17px;
+}
+
+.error-star {
+    color: red;
+    font-weight: bold;
+    margin-left: 5px;
+  }
+  
+  .form-error {
+    margin-bottom: 20px;
+    color: red;
+    font-size: 16px;
+    text-align: center;
+    margin-top: -10px;
+    margin-bottom: 35px;
+  }
+  
+
+  
