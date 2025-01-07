@@ -1,1 +1,16 @@
-<button (click)="emailActivation()">Activate email</button>
+<div class="main-div">
+    <div class="activation" *ngIf="!buttonClicked">
+        <h1 class="header1">Activate Your Account</h1>
+        <p>
+            Thank you for registering! 
+        </p>
+        <p>
+            To complete your registration and activate your account, please confirm your email address by clicking the button below.
+        </p>
+        <button class="activation-button" (click)="emailActivation()">Activate My Account</button>
+    </div>
+
+    <div class="activation" *ngIf="buttonClicked">
+        <h1 class="header2">Your Account Is Activated</h1>
+    </div>
+</div>

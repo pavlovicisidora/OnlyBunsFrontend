@@ -1,6 +1,6 @@
 <div class="user-profile-main">
   <div class="user-info">
-    <span class="img-border"><img class="pfp-style" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHEG52Sr7jhRGeCPW52ySJWncc0xd6KZNLpQ&s" alt="Wide Image Example"></span>
+    <span class="img-border"><img class="pfp-style" src="https://i.pinimg.com/736x/09/21/fc/0921fc87aa989330b8d403014bf4f340.jpg" alt="Wide Image Example"></span>
     
     <div class="user-info-text">
       <div style="display: flex;flex-direction: row; gap: 15px;">
@@ -13,7 +13,9 @@
 
       <div class="counting-data">
         <span><p><b>{{userProfile?.postCount}}</b> posts</p></span>
-        <span><p><b>{{userProfile?.followersCount}}</b> followers</p></span>
+        <span (click)="toggleFollowersModal()">
+          <p><b>{{userProfile?.followersCount}}</b> followers</p>
+        </span>
         
         <span (click)="toggleFollowingModal()">
           <p><b>{{followingUsers.length}}</b> following</p>
@@ -24,6 +26,7 @@
         <p><strong>{{userProfile?.firstName}} {{userProfile?.lastName}}</strong></p>
         
         <p>{{userProfile?.email}}</p>
+        <p>{{userProfile?.location?.country}}, {{userProfile?.location?.city}}</p>
       </div>
     </div>
 </div>
@@ -35,6 +38,19 @@
     <h3 style="margin-bottom: 20px;">Following</h3>
     <ul>
       <li *ngFor="let user of followingUsers">
+        <p (click)="seeProfile(user.id)" style="margin-bottom: 8px; cursor: pointer;">{{ user.username }} <i>({{ user.firstName }} {{ user.lastName }})</i></p>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="isFollowersModalOpen" (click)="closeFollowersModal()"></div>
+<div class="modal" *ngIf="isFollowersModalOpen">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeFollowersModal()">&#x2715;</button>
+    <h3 style="margin-bottom: 20px;">Followers</h3>
+    <ul>
+      <li *ngFor="let user of followerUsers">
         <p (click)="seeProfile(user.id)" style="margin-bottom: 8px; cursor: pointer;">{{ user.username }} <i>({{ user.firstName }} {{ user.lastName }})</i></p>
       </li>
     </ul>

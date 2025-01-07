@@ -24,7 +24,14 @@ export class PostComponent implements OnInit {
     email: '',
     postCount: 0,
     followersCount: 0,
-    role: { id: 0, name: ''}
+    role: { id: 0, name: ''},
+    location:{
+      id: 0,
+      longitude: 0,
+      latitude: 0,
+      country: '',
+      city: '',
+    }
   };
   //isLiked: boolean | null = null;
   isCommentsModalOpen = false;

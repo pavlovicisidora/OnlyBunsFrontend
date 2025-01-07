@@ -177,6 +177,14 @@ export class PostAuthoringService {
     return this.http.get<UserProfile[]>(`http://localhost:8080/api/users/following/${userId}`, { headers });
   }
 
+  getFollowersAccounts(userId: number): Observable<UserProfile[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<UserProfile[]>(`http://localhost:8080/api/users/followers/${userId}`, { headers });
+  }
 
 
   getAllUsersPosts(userId: number): Observable<Post[]> {
