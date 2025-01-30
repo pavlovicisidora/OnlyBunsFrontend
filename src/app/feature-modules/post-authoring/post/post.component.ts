@@ -160,7 +160,10 @@ export class PostComponent implements OnInit {
                   this.newCommentText[postId] = ''; 
                 }
               },
-              error: (err) => console.error('Error adding comment:', err)
+              error: (err) =>{
+                alert("You have reached maximum of 5 request per minute. Please wait for your next activity!")
+                 console.error('Error adding comment:', err)
+              }
             });
           }else{
             alert('You achived maximum of 60 comments per hour!');
