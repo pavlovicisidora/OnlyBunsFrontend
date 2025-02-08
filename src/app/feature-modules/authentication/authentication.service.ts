@@ -90,6 +90,13 @@ export class AuthenticationService {
   }
 
   logout() {
+    
+    this.http.put<void>('http://localhost:8080/api/users/logout',null).subscribe({
+      next: () =>{
+        console.log("Logout successfully!");
+      }
+    });
+
     this.currentUserSubject.next(null);
     localStorage.removeItem("jwt");
     this.access_token = null;
