@@ -41,26 +41,25 @@ export class LoginComponent implements OnInit{
     });
   }
 
-  onSubmit(): void {
-    if (this.loginForm.valid) {
-      const loginData = this.loginForm.value;
+ onSubmit(): void {
+  if (this.loginForm.valid) {
+    const loginData = this.loginForm.value;
 
-      // Pozivanje servisa za login
-      this.authService.login(loginData).subscribe({
-        next: (response) => {
-          // Ako je login uspešan, spremite token u lokalnu memoriju
-          localStorage.setItem('jwt', response.accessToken);
-          console.log('Token set in localStorage:', response.accessToken);
-          this.router.navigate(['/home']);
-          // Redirektujte korisnika na home stranicu ili neku drugu stranicu
-          
-        },
-        error: (error) => {
+    this.authService.login(loginData).subscribe({
+      next: (response) => {
+        localStorage.setItem('jwt', response.accessToken);
+        console.log('Token set in localStorage:', response.accessToken);
+        this.router.navigate(['/home']);
+      },
+      error: (error) => {
+        if (error.status === 429) {
+          this.errorMessage = 'Too many login attempts. Please wait a minute.';
+        } else {
           this.errorMessage = 'Invalid username or password';
-          console.error('Login error:', error);
         }
-      });
-
-    }
+        console.error('Login error:', error);
+      }
+    });
   }
+}
 }
