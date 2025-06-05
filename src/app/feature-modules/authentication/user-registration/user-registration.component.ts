@@ -13,6 +13,8 @@ import { AbstractControl, ValidatorFn } from '@angular/forms';
 })
 export class UserRegistrationComponent implements OnInit{
 
+  usernameTaken: boolean = false;
+
   registrationForm: FormGroup;
   availableLocations: Location[] = [];
   registrationSuccess: boolean = false;
@@ -85,48 +87,64 @@ export class UserRegistrationComponent implements OnInit{
 
   registerUser(): void {
     if (this.registrationForm.valid) {
-      // Find the selected location based on the selected location ID
       this.showFormError = false;
-      const location: Location = {
-        id: 0,
-        longitude: this.SelectedLongitude,
-        latitude: this.SelectedLatitude,
-        country: this.SelectedCountry,
-        city: this.SelectedCity
-      };
-
-      const formData: Registration = {
-        id: 0, 
-        username: this.registrationForm.value.username,
-        password: this.registrationForm.value.password,
-        firstName: this.registrationForm.value.firstName,
-        lastName: this.registrationForm.value.lastName,
-        email: this.registrationForm.value.email,
-        location: location,
-        isActivated: false 
-      };
-
-      console.log(JSON.stringify(formData, null, 2));
-
-      this.authService.registerUser(formData).subscribe({
-        next: () => {
-          this.resetForm();
-          this.SelectedCity='';
-          this.SelectedCountry='';
+      const username = this.registrationForm.value.username;
+  
+      // Provera da li username postoji
+      this.authService.checkUsernameExists(username).subscribe({
+        next: (exists) => {
+          if (exists) {
+            this.usernameTaken = true;
+            this.scrollToTop('formErrorSection');
+          } else {
+            this.usernameTaken = false;
+  
+            const location: Location = {
+              id: 0,
+              longitude: this.SelectedLongitude,
+              latitude: this.SelectedLatitude,
+              country: this.SelectedCountry,
+              city: this.SelectedCity
+            };
+  
+            const formData: Registration = {
+              id: 0, 
+              username: this.registrationForm.value.username,
+              password: this.registrationForm.value.password,
+              firstName: this.registrationForm.value.firstName,
+              lastName: this.registrationForm.value.lastName,
+              email: this.registrationForm.value.email,
+              location: location,
+              isActivated: false 
+            };
+  
+            console.log(JSON.stringify(formData, null, 2));
+  
+            this.authService.registerUser(formData).subscribe({
+              next: () => {
+                this.resetForm();
+                this.SelectedCity = '';
+                this.SelectedCountry = '';
+              },
+              error: (error) => {
+                this.registrationSuccess = false;
+                this.errorMessage = 'Registration failed. Please try again.';
+                console.error('Error during registration:', error);
+              }
+            });
+          }
         },
         error: (error) => {
-          this.registrationSuccess = false;
-          this.errorMessage = 'Registration failed. Please try again.';
-          console.error('Error during registration:', error);
+          console.error('Error checking username:', error);
         }
       });
-    }
-    else{
+    } else {
       this.showFormError = true;
       this.scrollToTop('formErrorSection');
       this.markAllFieldsAsTouched();
     }
   }
+  
 
   scrollToTop(sectionId: string): void {
     const section = document.getElementById(sectionId);

@@ -30,6 +30,9 @@
             Username <span *ngIf="isFieldInvalid('username')" class="error-star">*</span>
           </label>
           <input class="input-design" id="username" formControlName="username" type="text" />
+          <div *ngIf="usernameTaken">
+            <small class="error-text">Username already exists. Please choose another one.</small>
+          </div>
         </div>
 
         <!-- Email -->

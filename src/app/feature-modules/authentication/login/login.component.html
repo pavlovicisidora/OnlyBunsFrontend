@@ -1,33 +1,39 @@
-<div class="form-div">
-  <h1 style="color: #3B163B;">Log in</h1>
-<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <!-- Username -->
-  <div class="colum-div">
-    <label class="label-design" for="username">Username</label>
-    <input class="input-design" id="username" formControlName="username" type="text" />
-  </div>
+<div>
+  <button class="button-for-home" [routerLink]="['/home']"> &lt; Go back</button>
+  <img class="big-purple-bunny" src="../../../../assets/Big purple bunny.png"/>
+  <img class="big-orange-bunny" src="../../../../assets/Big orange bunny.png"/>
+  <img class="small-purple-bunny" src="../../../../assets/Small purple bunny.png"/>
+  <img class="special-bunny" src="../../../../assets/Special bunny.png"/>
+  <img class="like-bunny" src="../../../../assets/like-bunny-login.png"/>
+  <div class="form-div">
+    <h1 style="color: #3B163B;">Log in</h1>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <!-- Username -->
+    <div class="colum-div">
+      <label class="label-design" for="username">Username</label>
+      <input class="input-design" id="username" placeholder="Enter your username here" formControlName="username" type="text" />
+    </div>
 
-  <!-- Password -->
-  <div class="colum-div">
-    <label class="label-design" for="password">Password</label>
-    <input class="input-design" id="password" formControlName="password" type="password" />
-  </div>
+    <!-- Password -->
+    <div class="colum-div">
+      <label class="label-design" for="password">Password</label>
+      <input class="input-design" id="password" placeholder="Enter your password here" formControlName="password" type="password" />
+    </div>
 
-  <!-- Error Message -->
-  <div *ngIf="errorMessage" class="error">
-    {{ errorMessage }}
-  </div>
+    <div class="colum-div" style="align-items: center; margin-bottom: 0;">
+      <button class="submit-css" type="submit">Login</button>
+      <div class="error">{{ errorMessage || '\u00A0' }}</div>
+    </div>
 
-  <!-- Submit Button -->
-  <div>
-    <button class="submit-css" type="submit">LOG IN</button>
-  </div>
 
-  
-</form>
 
-  <p style="color: #3B163B;">Don't have an account? <a [routerLink]="['/registration']" class="link-design">Sign up</a></p>
+    
+  </form>
 
-  </div>
+    <p style="color: #3B163B; margin-top: 8px;">Don't have an account? <a [routerLink]="['/registration']" class="link-design">Sign up</a></p>
+
+    </div>
+
+</div>
 
   
