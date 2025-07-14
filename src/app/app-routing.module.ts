@@ -12,6 +12,7 @@ import { UserProfileComponent } from './feature-modules/post-authoring/user-prof
 import { TrendsComponent } from './feature-modules/Layout/ToImplement/trends/trends.component';
 import { ChatComponent } from './feature-modules/Layout/ToImplement/chat/chat.component';
 import { MapComponent } from './shared/map/map.component';
+import { DisplayLocationMapComponent } from './shared/display-location-map/display-location-map.component';
 import { ForUComponent } from './feature-modules/Layout/ToImplement/for-u/for-u.component';
 import { AboutComponent } from './feature-modules/Layout/ToImplement/about/about.component';
 import { AppAnalyticsComponent } from './feature-modules/administrator/app-analytics/app-analytics.component';
@@ -27,7 +28,7 @@ const routes: Routes =[
     {path: 'user-profile', component: UserProfileComponent},
     {path: 'trends', component: TrendsComponent},
     {path: 'chat', component: ChatComponent},
-    {path: 'map', component: MapComponent},
+    {path: 'display-map', component: DisplayLocationMapComponent},
     {path: 'forU', component:ForUComponent},
     {path: 'about', component: AboutComponent},
     {path: 'app-analytics', component: AppAnalyticsComponent}

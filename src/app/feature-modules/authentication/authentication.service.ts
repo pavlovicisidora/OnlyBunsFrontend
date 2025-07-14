@@ -49,6 +49,12 @@ export class AuthenticationService {
   );
   }
 
+  checkUsernameExists(username: string): Observable<boolean> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get<boolean>('http://localhost:8080/auth/check-username', { params });
+  }
+  
+
   activateEmail(userId: number): Observable<any>{
 
     const headers = new HttpHeaders({

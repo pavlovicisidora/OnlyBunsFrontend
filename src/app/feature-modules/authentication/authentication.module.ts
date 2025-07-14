@@ -12,6 +12,7 @@ import { LocationComponent } from './location/location.component';
 import { LoginComponent } from './login/login.component';
 import { EmailActivationComponent } from './email-activation/email-activation.component';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
 declarations: [
@@ -30,6 +31,7 @@ imports: [
     MatDialogModule,     
     MatIconModule,
     RouterModule,
+    SharedModule
 ],
 exports:[
   UserRegistrationComponent,

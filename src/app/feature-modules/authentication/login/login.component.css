@@ -1,24 +1,73 @@
+.big-purple-bunny{
+    height: 450px;
+    position: absolute;
+    top: 29px;
+    right: 17%;
+}
+.big-orange-bunny{
+    height: 298px;
+    position: absolute;
+    top: 22px;
+    left: 25%;
+}
+.small-purple-bunny{
+    height: 150px;
+    position: absolute;
+    top: 330px;
+    left: 24%;
+}
+.special-bunny{
+    height: 220px;
+    position: absolute;
+    top: 460px;
+    left: 36%;
+}
+
+.like-bunny{
+    height: 86px;
+    position: absolute;
+    top: 500px;
+    right: 30%;
+}
+
+.button-for-home{
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    border: none;
+    background: none;
+    color: #CC8EBF;
+    font-weight: bolder;
+    font-size: 22px;
+    cursor: pointer;
+    
+}
 .form-div{
-    margin: auto;
     padding: 30px;
-    background-color: rgb(255, 255, 255, 0.6);
-    backdrop-filter: blur(50px);
-    width: 70vh;
-    height: 60%;
-    margin-top: 8vh;
-    border-radius: 15px;
-    box-shadow: 1px 1px 20px 1px rgba(255, 255, 255, 0.505);
-    border: 1px solid white;
+    background-color: rgb(255, 255, 255, 0.4);
+    backdrop-filter: blur(8px);
+    width: 470px;
+    height: 470px;
+    border-radius: 100%;
+    box-shadow: 1px 1px 20px 4px rgba(255, 255, 255, 0.9);
+    border: 2px solid white;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    margin: auto;
+    margin-top: 11vh;
 }
 
 .colum-div{
     display: flex;
     flex-direction: column;
-    margin-bottom: 25px;
+    margin-bottom: 18px;
 }
+
+::placeholder {
+    color: #CC8EBF;
+  }
 
 .input-design{
     width: 250px;
@@ -26,7 +75,8 @@
     border-radius: 25px;
     border:2px solid #3B163B;
     padding: 5px;
-    background-color: rgb(255, 255, 255, 0.4);
+    padding-left: 10px;
+    background-color: white;
 }
 
 .label-design{
@@ -43,9 +93,10 @@
     border: 1px solid #3B163B;
     font-weight: bold;
     color: #CC8EBF;
-    margin-left: 6vh;
-    margin-bottom: 20px;
-    margin-top: 10px;
+    display: flex;
+    justify-self: center;
+    justify-content: center;
+    padding: 12px;
 }
 
 .submit-css:hover{
@@ -63,10 +114,18 @@
     text-decoration: underline;
 }
 
-.error{
-    margin-top: -24px;
-    margin-bottom: 6px;
-    margin-left: 4vh;
+.error {
+    margin-top: 8px;
     color: red;
-    font-weight: bold;
+    font-size: 15px;
+    min-height: 18px;
+    text-align: center;
+}
+
+.togglePassword{
+    width: 22px;
+    position: relative;
+    z-index: 1000;
+    top: -32px;
+    left: 233px;
 }

@@ -4,6 +4,8 @@ import { PostAuthoringService } from '../post-authoring.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthenticationService } from '../../authentication/authentication.service';
 import { Post } from '../models/post';
+import { ChangePassword } from '../models/change-password';
+
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -23,11 +25,21 @@ export class UserProfileComponent implements OnInit {
       id: 0,
       name:'',
     },
+    location:{
+      id: 0,
+      longitude: 0,
+      latitude: 0,
+      country: '',
+      city: '',
+    },
     followersCount: 0,
   };
   followingUsers: UserProfile[] = [];
+  followerUsers: UserProfile[] = [];
   isFollowing: boolean = false;
   userId: number = 0;
+  hovering: boolean = false;
+
   /********** Posts ***********/
   posts: Post[] = [];
     newCommentText: { [postId: number]: string } = {};
@@ -70,6 +82,7 @@ export class UserProfileComponent implements OnInit {
         this.userProfile = profile;
         this.checkIfFollowing(userId);
         this.loadFollowingUsers(userId);
+        this.loadFollowersUsers(userId);
       },
       error: (err) => console.error('Error fetching user profile:', err)
     });
@@ -78,11 +91,19 @@ export class UserProfileComponent implements OnInit {
   seeProfile(userId: number) {
     this.router.navigate(['/user-profile'], { queryParams: { id: userId } });
     this.closeFollowingModal();
+    this.closeFollowersModal();
   }
 
   loadFollowingUsers(userId: number): void {
     this.postService.getFollowingsAccounts(userId).subscribe({
       next: (users) => this.followingUsers = users,
+      error: (err) => console.error('Error fetching following users:', err)
+    });
+  }
+
+  loadFollowersUsers(userId: number): void {
+    this.postService.getFollowersAccounts(userId).subscribe({
+      next: (users) => this.followerUsers = users,
       error: (err) => console.error('Error fetching following users:', err)
     });
   }
@@ -256,5 +277,57 @@ export class UserProfileComponent implements OnInit {
   closeFollowingModal() {
     this.isFollowingModalOpen = false;
   }
+
+  isFollowersModalOpen: boolean = false;
+
+  toggleFollowersModal() {
+    this.isFollowersModalOpen = !this.isFollowingModalOpen;
+  }
+
+  closeFollowersModal() {
+    this.isFollowersModalOpen = false;
+  }
+
+
+
+
+
+  //////////////////////// CHANGE PASSWORD ///////////////////////
+  isChangePasswordModalOpen = false;
+  changePasswordData: ChangePassword = { password: '' };
+  confirmPassword: string = '';
+
+get passwordMismatch(): boolean {
+  return this.changePasswordData.password !== this.confirmPassword;
+}
+
+openChangePasswordModal() {
+  this.isChangePasswordModalOpen = true;
+  this.changePasswordData.password = '';
+  this.confirmPassword = '';
+}
+
+closeChangePasswordModal() {
+  this.isChangePasswordModalOpen = false;
+}
+
+submitPasswordChange() {
+  if (this.passwordMismatch) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  this.postService.updateUserPassword(this.changePasswordData).subscribe({
+    next: () => {
+      alert('Password updated successfully');
+      this.closeChangePasswordModal(); // ako koristiš modal
+    },
+    error: err => {
+      console.error(err);
+      alert('Failed to update password');
+    }
+  });
+}
+
 
 }

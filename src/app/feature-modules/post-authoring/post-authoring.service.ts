@@ -6,7 +6,7 @@ import { UserProfile } from './models/user-profile.model';
 import { Comment } from './models/comment';
 import { PostCreation } from './models/postCreation';
 import { RegisteredUser } from '../administrator/models/registered-user';
-
+import { ChangePassword } from './models/change-password';
 @Injectable({
   providedIn: 'root'
 })
@@ -177,6 +177,14 @@ export class PostAuthoringService {
     return this.http.get<UserProfile[]>(`http://localhost:8080/api/users/following/${userId}`, { headers });
   }
 
+  getFollowersAccounts(userId: number): Observable<UserProfile[]> {
+    const token = localStorage.getItem("jwt");
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`, // Dodavanje Bearer tokena
+      'Accept': 'application/json'
+    });
+    return this.http.get<UserProfile[]>(`http://localhost:8080/api/users/followers/${userId}`, { headers });
+  }
 
 
   getAllUsersPosts(userId: number): Observable<Post[]> {
@@ -187,5 +195,21 @@ export class PostAuthoringService {
     });
     return this.http.get<Post[]>(`http://localhost:8080/api/posts/allUsersPosts/${userId}`, { headers });
   }
+
+
+ updateUserPassword(dto: ChangePassword): Observable<string> {
+  const token = localStorage.getItem("jwt");
+
+  const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.put(
+  'http://localhost:8080/api/users/update-password',
+  dto,
+  { headers, responseType: 'text' as const }
+  );
+}
 
 }

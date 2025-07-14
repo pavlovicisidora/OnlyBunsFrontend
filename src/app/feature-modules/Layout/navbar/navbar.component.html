@@ -11,7 +11,7 @@
         <button class="menu-buttons" [routerLink]="['posts-view']">Posts</button> | 
         <button class="menu-buttons" [routerLink]="['trends']" *ngIf="currentUser !== null">Trends</button> <span *ngIf="currentUser !== null">|</span>
         <button class="menu-buttons" [routerLink]="['chat']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">Chat</button> <span *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">|</span>
-        <button class="menu-buttons" [routerLink]="['map']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">Map</button> <span *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">|</span> 
+        <button class="menu-buttons" [routerLink]="['display-map']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">Map</button> <span *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">|</span> 
         <button class="menu-buttons" [routerLink]="['user-profile']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">Profile</button> <span *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">|</span>
         <button class="menu-buttons" [routerLink]="['create-post']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">Post</button> <span *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_USER'">|</span>
         <button class="menu-buttons" [routerLink]="['users-view']" *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_ADMIN'">Users</button> <span *ngIf="currentUser !== null && currentUser.role.name === 'ROLE_ADMIN'">|</span>

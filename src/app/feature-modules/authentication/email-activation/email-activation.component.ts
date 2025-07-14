@@ -10,7 +10,7 @@ import { AuthenticationService } from '../authentication.service';
 export class EmailActivationComponent implements OnInit {
 
   userId: number | null = null;
-
+  buttonClicked: boolean = false;
   constructor(
     private route: ActivatedRoute,
     private authService: AuthenticationService
@@ -25,6 +25,7 @@ export class EmailActivationComponent implements OnInit {
 
   emailActivation(): void {
     if (this.userId !== null) {
+      this.buttonClicked = true;
       this.authService.activateEmail(this.userId).subscribe(
         (response) => {
           console.log('Email successfully activated', response);
