@@ -32,7 +32,7 @@
     display: flex;
     flex-direction: row;
     gap: 25px;
-    font-size: 17px;
+    font-size: 15px;
 }
 
 .pfp-style{
@@ -352,4 +352,74 @@
   padding: 5px;
   font-weight: bold;
   font-size: 16px;
+}
+
+.edit-button-style {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.edit-button-style img {
+  width: 40px;
+  height: 40px;
+}
+
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-bottom: -19px;
+  float: right;
+  margin-right: 22px;
+}
+
+.password-txtbox{
+  width: 250px;
+  height: 30px;
+  border-radius: 25px;
+  border:2px solid #3B163B;
+  padding: 5px;
+  padding-left: 10px;
+  background-color: white;
+  display: block;
+  margin: 0 auto;
+}
+
+
+.label-design{
+  font-size: 15px;
+  font-weight: bold;
+  color: #3B163B;
+  margin-left: 20px;
+}
+
+.modal-header{
+ text-align: center;
+ margin-bottom: 30px;
+}
+
+.password-confirm-btn {
+  width: 130px;
+  height: 30px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  border-radius: 20px;
+  background-color: #3B163B;
+  border: 1px solid #3B163B;
+  font-weight: bold;
+  color: #CC8EBF;
+}
+
+.password-confirm-btn:hover {
+  width: 130px;
+  height: 30px;
+  display: block;
+  margin: 0 auto;
+  margin-top: 20px;
+  border-radius: 20px;
+  background-color: #CC8EBF;
+  border: 1px solid #CC8EBF;
+  font-weight: bold;
+  color: #3B163B;
 }

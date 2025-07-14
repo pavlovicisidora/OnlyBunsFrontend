@@ -122,4 +122,10 @@
     text-align: center;
 }
 
-
+.togglePassword{
+    width: 22px;
+    position: relative;
+    z-index: 1000;
+    top: -32px;
+    left: 233px;
+}
