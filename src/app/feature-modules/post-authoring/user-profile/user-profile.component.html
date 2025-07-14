@@ -9,6 +9,14 @@
         <button [ngClass]="isFollowing ? 'unfollow-button' : 'follow-button'" *ngIf="loggedInUser && loggedInUser.id !== userProfile?.id" (click)="toggleFollow()">
           {{ isFollowing ? 'Unfollow' : 'Follow' }}
         </button>
+
+      <button class="edit-button-style"
+        *ngIf="loggedInUser && loggedInUser.id == userProfile?.id"
+        (click)="openChangePasswordModal()" 
+        (mouseenter)="hovering = true"
+        (mouseleave)="hovering = false">
+  <img [src]="hovering ? 'assets/Edit-hover.png' : 'assets/Edit.png'" alt="Edit">
+</button>
       </div>
 
       <div class="counting-data">
@@ -56,6 +64,28 @@
     </ul>
   </div>
 </div>
+
+
+<div class="modal-overlay" *ngIf="isChangePasswordModalOpen" (click)="closeChangePasswordModal()"></div>
+<div class="modal" *ngIf="isChangePasswordModalOpen">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <button class="close-btn" (click)="closeChangePasswordModal()">&#x2715;</button>
+    <h3 class="modal-header">Change Password</h3>
+    <form (ngSubmit)="submitPasswordChange()" #passwordForm="ngForm">
+      <div>
+        <label class="label-design" for="newPassword">New Password</label>
+        <input class="password-txtbox" id="newPassword" name="newPassword" type="password" [(ngModel)]="changePasswordData.password" />
+      </div>
+      <div>
+        <label class="label-design" for="confirmPassword">Confirm Password</label>
+        <input class="password-txtbox" id="confirmPassword" name="confirmPassword" type="password" [(ngModel)]="confirmPassword"  />
+      </div>
+      <div *ngIf="passwordMismatch" class="error-text">Passwords do not match.</div>
+      <button class="password-confirm-btn" type="submit" [disabled]="passwordForm.invalid || passwordMismatch">Confirm</button>
+    </form>
+  </div>
+</div>
+
 
 <hr style="margin-top: 5vh;border: 1px solid #4a1c49; margin-bottom: 10px;">
 

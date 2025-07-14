@@ -17,7 +17,21 @@
     <!-- Password -->
     <div class="colum-div">
       <label class="label-design" for="password">Password</label>
-      <input class="input-design" id="password" placeholder="Enter your password here" formControlName="password" type="password" />
+      <input 
+        class="input-design" 
+        id="password" 
+        [type]="passwordVisible ? 'text' : 'password'" 
+        placeholder="Enter your password here" 
+        formControlName="password" 
+      />
+      
+      <img 
+        [src]="passwordVisible ? '../../../../assets/Eye off.png' : '../../../../assets/Eye.png'" 
+        class="togglePassword" 
+        alt="Toggle Password" 
+        style="cursor: pointer;" 
+        (click)="togglePasswordVisibility()"
+      >
     </div>
 
     <div class="colum-div" style="align-items: center; margin-bottom: 0;">

@@ -28,6 +28,9 @@ export class LoginComponent implements OnInit{
   loginForm: FormGroup;
   errorMessage: string | null = null;
   ngOnInit(): void {}
+  passwordVisible = false;
+
+
 
   constructor(
     private fb: FormBuilder,
@@ -40,6 +43,10 @@ export class LoginComponent implements OnInit{
       password: ['', Validators.required]
     });
   }
+
+  togglePasswordVisibility() {
+  this.passwordVisible = !this.passwordVisible;
+}
 
  onSubmit(): void {
   if (this.loginForm.valid) {
