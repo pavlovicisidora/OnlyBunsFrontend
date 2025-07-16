@@ -206,4 +206,24 @@ closeCommentsModal() {
   this.isCommentsModalOpen = false;
   this.selectedPost = null;
 }
+
+activeDropdownPostId: number | null = null;
+
+showDropMenu(postId: number) {
+  if (this.activeDropdownPostId === postId) {
+    this.activeDropdownPostId = null; // sakrij ako je već otvoren
+  } else {
+    this.activeDropdownPostId = postId; // postavi ID aktivnog posta
+  }
+}
+
+sendToAdvertisers(post: Post) {
+   this.service.advertisePost(post.id).subscribe({
+        next: () => {
+           alert("You have successfully sent the post for advertising!");
+        },
+        error: (err) => console.error('Error while sending the post for advertising:', err)
+    });
+  this.activeDropdownPostId = null;   
+}
 }

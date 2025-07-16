@@ -32,6 +32,15 @@
 <div *ngFor="let post of posts" class="post">
   <div class="user-info">
       <p (click)="seeProfile(post.userId)"  style="cursor: pointer;">&#64;{{usernames[post.userId]}}</p>
+
+    <div *ngIf="loggedInUser.role.name === 'ROLE_ADMIN'">
+      <button class="advertise-button" (click) ="showDropMenu(post.id)">
+            <img src="../../../../assets/Dots.jpg" alt="Advertise Icon" class="advertise-icon" />
+        </button>
+          <div *ngIf="activeDropdownPostId === post.id" class="dropdown-menu">
+            <button class="dropdown-item" (click)="sendToAdvertisers(post)">Send to advertisers</button>
+          </div>
+        </div>
   </div>
   <div class="post-image">
     <img *ngIf="post.image" [src]="imageCache[post.image] || getImage(post.image)" alt="Post Image" class="post-image" />
