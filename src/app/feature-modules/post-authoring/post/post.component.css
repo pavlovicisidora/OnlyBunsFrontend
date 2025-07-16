@@ -28,6 +28,7 @@
     align-items: center;
     margin-top: 10px;
     margin-bottom: 10px;
+    position: relative;
 }
 
 .user-info p {
@@ -59,12 +60,47 @@
     background-color: white;
     border:none;
   }
-  
+
   .like-icon{
     height: 6vh;
     width: 5vh;
     cursor: pointer;
   }
+
+.advertise-button{
+  background-color: white;
+  border:none;
+}
+  .advertise-icon{
+    height: 5vh;
+    width: 5vh;
+    cursor: pointer;
+  }
+.dropdown-menu {
+  position: absolute;
+  top: 100%;  /* ispod dugmeta */
+  right: 0;   /* poravnaj desno sa dugmetom */
+  background-color: white;
+  border: 1px solid #ccc;
+  z-index: 10;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-align: left;
+  width: 100%;
+}
+
+.dropdown-item:hover {
+  background-color: #f0f0f0;
+}
+
 
   .comment-icon{
     margin-left:5px;

@@ -167,7 +167,10 @@ export class PostComponent implements OnInit {
                   this.newCommentText[postId] = ''; 
                 }
               },
-              error: (err) => console.error('Error adding comment:', err)
+              error: (err) =>{
+                alert("You have reached maximum of 5 request per minute. Please wait for your next activity!")
+                 console.error('Error adding comment:', err)
+              }
             });
           }else{
             alert('You achived maximum of 60 comments per hour!');
@@ -202,5 +205,25 @@ export class PostComponent implements OnInit {
 closeCommentsModal() {
   this.isCommentsModalOpen = false;
   this.selectedPost = null;
+}
+
+activeDropdownPostId: number | null = null;
+
+showDropMenu(postId: number) {
+  if (this.activeDropdownPostId === postId) {
+    this.activeDropdownPostId = null; // sakrij ako je već otvoren
+  } else {
+    this.activeDropdownPostId = postId; // postavi ID aktivnog posta
+  }
+}
+
+sendToAdvertisers(post: Post) {
+   this.service.advertisePost(post.id).subscribe({
+        next: () => {
+           alert("You have successfully sent the post for advertising!");
+        },
+        error: (err) => console.error('Error while sending the post for advertising:', err)
+    });
+  this.activeDropdownPostId = null;   
 }
 }

@@ -212,4 +212,15 @@ export class PostAuthoringService {
   );
 }
 
+ advertisePost(postId: number):Observable<void>{
+    const token = localStorage.getItem("jwt");
+
+    const headers = new HttpHeaders({
+    'Authorization': `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  });
+
+  return this.http.put<void>(`http://localhost:8080/api/posts/advertise/${postId}`,{},{ headers });
+ }
+
 }
