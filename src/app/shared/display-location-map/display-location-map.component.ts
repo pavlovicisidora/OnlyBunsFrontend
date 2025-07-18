@@ -5,7 +5,7 @@ import { UserProfile } from 'src/app/feature-modules/post-authoring/models/user-
 import { MapDisplayLocationMapService } from './display-location-map.service';
 import { Post } from 'src/app/feature-modules/post-authoring/models/post';
 import { RabbitCare } from '../models/rabbitCare';
-
+import { PostAuthoringService } from 'src/app/feature-modules/post-authoring/post-authoring.service';
 @Component({
   selector: 'app-display-location-map',
   templateUrl: './display-location-map.component.html',
@@ -13,13 +13,14 @@ import { RabbitCare } from '../models/rabbitCare';
 })
 export class DisplayLocationMapComponent  implements AfterViewInit, OnDestroy{
   constructor(private authService: AuthenticationService,
-              private mapService: MapDisplayLocationMapService
+              private mapService: MapDisplayLocationMapService,
+              private postService: PostAuthoringService, 
   ) {}
   @Input() userLat!: number;
   @Input() userLng!: number;
   @Input() posts: Post[] = [];
   rabbitCareLocations: RabbitCare[] = [];
-
+  imageCache: { [path: string]: string } = {};
 
   private map!: L.Map;
 
@@ -45,15 +46,15 @@ private addPostMarkers(): void {
   for (const post of this.posts) {
     const lat = post.location.latitude;
     const lng = post.location.longitude;
-
+    this.getImage(post.image);
     if (lat && lng) {
-      const popupContent = `
-        <b>${post.description}</b><br>
-      `;
+      
+      let popupContent = `<img src="${this.imageCache[post.image]}" style="width: 150px; max-height: 150px; margin-top: 5px;"><br>`;
+      popupContent += `<b>${post.description}</b>`;
 
       const postIcon = L.icon({
         iconUrl: 'assets/Bunny pin.png', 
-        iconSize: [30, 40],           
+        iconSize: [32, 44],           
         iconAnchor: [19, 38],         
         popupAnchor: [0, -36],       
       });
@@ -65,13 +66,42 @@ private addPostMarkers(): void {
   }
 }
 
+getImage(path: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (this.imageCache[path]) {
+      resolve(this.imageCache[path]);
+    } else {
+      this.postService.getImage(path).subscribe({
+        next: blob => {
+          const imageUrl = URL.createObjectURL(blob);
+          this.imageCache[path] = imageUrl;
+          resolve(imageUrl);
+        },
+        error: err => {
+          console.error("Greška prilikom učitavanja slike", err);
+          reject(err);
+        }
+      });
+    }
+  });
+}
 
-private loadPosts(): void {
+
+private async loadPosts(): Promise<void> {
   this.mapService.getPostsForMap().subscribe({
-    next: (posts: Post[]) => {
-      console.log('Dobijeni postovi:', posts); // <--- DODAJ OVO
+    next: async (posts: Post[]) => {
       this.posts = posts;
-      this.addPostMarkers();
+
+      const loadImagePromises = posts
+        .filter(post => post.image)
+        .map(post => this.getImage(post.image));
+
+      try {
+        await Promise.all(loadImagePromises); // sačekaj da se sve slike učitaju
+        this.addPostMarkers(); // sada su sve slike u imageCache!
+      } catch (error) {
+        console.error('Greška prilikom učitavanja slika:', error);
+      }
     },
     error: err => {
       console.error('Greška prilikom dobijanja postova za mapu:', err);
